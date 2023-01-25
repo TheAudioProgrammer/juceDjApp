@@ -1,8 +1,13 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "MixerDevice/MixerDeviceScanner.h"
 
+// Data
+#include "MixerDevice/Data/MixerDeviceScanner.h"
+#include "AudioPlayer/Data/AudioPlayerData.h"
+
+// UI
+#include "AudioPlayer/UI/AudioPlayerUI.h"
 
 
 
@@ -41,7 +46,11 @@ private:
     juce::TextButton settingsButton { "Settings "};
     juce::DialogWindow settingsWindow;
 
-
+    // Player UI is controlling Data
+    AudioPlayerData audioPlayerData1;
+    AudioPlayerUI audioPlayerUI1 { audioPlayerData1 };
+    
+    bool fileIsLoaded { false };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

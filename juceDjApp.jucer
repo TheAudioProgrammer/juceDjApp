@@ -9,12 +9,31 @@
       <FILE id="U0jt24" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>
     </GROUP>
-    <GROUP id="{76F6AD2B-AD87-EC36-1D7D-F5B28CC1D660}" name="MixerDevice">
-      <FILE id="W9GWUB" name="MixerDevice.h" compile="0" resource="0" file="Source/MixerDevice/MixerDevice.h"/>
-      <FILE id="TAk1au" name="MixerDeviceList.h" compile="0" resource="0"
-            file="Source/MixerDevice/MixerDeviceList.h"/>
-      <FILE id="xwcoTM" name="MixerDeviceScanner.h" compile="0" resource="0"
-            file="Source/MixerDevice/MixerDeviceScanner.h"/>
+    <GROUP id="{7490D2AA-233C-DCA0-97EE-56CC3AA5AE72}" name="AudioPlayer">
+      <GROUP id="{26D24715-2B6F-AC1F-7079-A63EBFD1BECD}" name="Data">
+        <FILE id="Uhaj2A" name="AudioPlayerData.cpp" compile="1" resource="0"
+              file="Source/AudioPlayer/Data/AudioPlayerData.cpp"/>
+        <FILE id="lfst3L" name="AudioPlayerData.h" compile="0" resource="0"
+              file="Source/AudioPlayer/Data/AudioPlayerData.h"/>
+      </GROUP>
+      <GROUP id="{D49EFD6B-243B-F05B-DE46-2FE6DD1E65DD}" name="UI">
+        <FILE id="RI92Hx" name="AudioPlayerUI.cpp" compile="1" resource="0"
+              file="Source/AudioPlayer/UI/AudioPlayerUI.cpp"/>
+        <FILE id="PPbpIs" name="AudioPlayerUI.h" compile="0" resource="0" file="Source/AudioPlayer/UI/AudioPlayerUI.h"/>
+      </GROUP>
+    </GROUP>
+    <GROUP id="{8C188C48-C70D-D188-4A41-B45DF2750970}" name="MixerDevice">
+      <GROUP id="{9C35225C-9447-B899-CE72-8C94D05EC141}" name="Data">
+        <FILE id="JrfvDk" name="MixerDevice.h" compile="0" resource="0" file="Source/MixerDevice/Data/MixerDevice.h"/>
+        <FILE id="kMqUe6" name="MixerDeviceList.h" compile="0" resource="0"
+              file="Source/MixerDevice/Data/MixerDeviceList.h"/>
+        <FILE id="wYlsFb" name="MixerDeviceScanner.h" compile="0" resource="0"
+              file="Source/MixerDevice/Data/MixerDeviceScanner.h"/>
+      </GROUP>
+    </GROUP>
+    <GROUP id="{8C73DC0F-B249-69D7-B4A3-1933DDA325B0}" name="State">
+      <FILE id="B4NRkA" name="AudioPlayerState.h" compile="0" resource="0"
+            file="Source/State/AudioPlayerState.h"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1"/>

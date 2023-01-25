@@ -36,6 +36,10 @@ deviceScanner (deviceManager), settingsWindow ("Settings", juce::Colours::black,
     
     //addAndMakeVisible (audioDeviceSelector);
     addAndMakeVisible (settingsButton);
+    
+    addAndMakeVisible (audioPlayerUI1);
+    
+    fileIsLoaded = audioPlayerData1.loadFile();
 }
 
 MainComponent::~MainComponent()
@@ -53,6 +57,9 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
 {
     bufferToFill.clearActiveBufferRegion();
+    
+    if (fileIsLoaded && audioPlayerData1.getPlayState() == AudioPlayerState::Playing)
+        audioPlayerData1.processAudio (bufferToFill);
 }
 
 void MainComponent::releaseResources()
@@ -68,6 +75,9 @@ void MainComponent::paint (juce::Graphics& g)
 
 void MainComponent::resized()
 {
-    //audioDeviceSelector.setBounds (getBounds());
-    settingsButton.setBounds (10, 10, 200, 100);
+    audioPlayerUI1.setBounds (0, 0, getWidth(), getHeight());
+    settingsButton.setBounds (10, 10, 100, 50);
 }
+
+
+
