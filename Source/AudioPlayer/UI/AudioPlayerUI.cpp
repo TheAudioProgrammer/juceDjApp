@@ -23,7 +23,7 @@ AudioPlayerUI::AudioPlayerUI (AudioPlayerData& p) : audioPlayerData(p)
     
     loadAudioButton.onClick = [&]()
     {
-        audioPlayerData.loadFile();
+        audioPlayerData.loadSong();
     };
     
     playAudioButton.onClick = [&]()
@@ -35,6 +35,17 @@ AudioPlayerUI::AudioPlayerUI (AudioPlayerData& p) : audioPlayerData(p)
     {
         audioPlayerData.setPlayState (AudioPlayerState::Stopped);
     };
+    
+    // Values set in dBFS!!
+    gainSlider.setRange (-60.0f, 0.0f, 0.01f);
+    gainSlider.setValue (0.0f);
+    
+    gainSlider.onValueChange = [&]()
+    {
+        audioPlayerData.setDecibelValue (gainSlider.getValue());
+    };
+    
+    addAndMakeVisible (gainSlider);
 }
 
 AudioPlayerUI::~AudioPlayerUI()
@@ -62,4 +73,6 @@ void AudioPlayerUI::resized()
     loadAudioButton.setBounds (10, 200, w, h);
     playAudioButton.setBounds (10, 260, w, h);
     stopAudioButton.setBounds (10, 320, w, h);
+    
+    gainSlider.setBounds (120, 200, 50, 170);
 }

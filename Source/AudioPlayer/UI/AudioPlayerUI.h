@@ -33,5 +33,7 @@ private:
     juce::TextButton playAudioButton { "Play" };
     juce::TextButton stopAudioButton { "Stop" };
     
+    juce::Slider gainSlider { juce::Slider::SliderStyle::LinearVertical, juce::Slider::TextBoxBelow };
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPlayerUI)
 };

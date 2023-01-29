@@ -39,7 +39,7 @@ deviceScanner (deviceManager), settingsWindow ("Settings", juce::Colours::black,
     
     addAndMakeVisible (audioPlayerUI1);
     
-    fileIsLoaded = audioPlayerData1.loadFile();
+    //fileIsLoaded = audioPlayerData1.loadSong();
 }
 
 MainComponent::~MainComponent()
@@ -51,14 +51,15 @@ MainComponent::~MainComponent()
 //==============================================================================
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
-    
+    // Assuming this is a stereo setup for each track
+    audioPlayerData1.prepareToPlay (2 , samplesPerBlockExpected, sampleRate);
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
 {
     bufferToFill.clearActiveBufferRegion();
     
-    if (fileIsLoaded && audioPlayerData1.getPlayState() == AudioPlayerState::Playing)
+    if (audioPlayerData1.getPlayState() == AudioPlayerState::Playing)
         audioPlayerData1.processAudio (bufferToFill);
 }
 
