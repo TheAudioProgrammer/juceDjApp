@@ -7,10 +7,8 @@
 #include "AudioPlayer/Data/AudioPlayerData.h"
 
 // UI
+#include "Settings/UI/SettingsUI.h"
 #include "AudioPlayer/UI/AudioPlayerUI.h"
-
-
-
 
 
 
@@ -42,13 +40,14 @@ private:
     // Checks our list of USB devices when a new device is connected
     MixerDeviceScanner deviceScanner;
     
-    // UI
-    juce::TextButton settingsButton { "Settings "};
-    juce::DialogWindow settingsWindow;
+    SettingsUI settingsUI;
 
     // Player UI is controlling Data
     AudioPlayerData audioPlayerData1;
     AudioPlayerUI audioPlayerUI1 { audioPlayerData1 };
+    
+    AudioPlayerData audioPlayerData2;
+    AudioPlayerUI audioPlayerUI2 { audioPlayerData2 };
     
     bool fileIsLoaded { false };
 

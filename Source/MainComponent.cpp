@@ -1,8 +1,7 @@
 #include "MainComponent.h"
 
 //==============================================================================
-MainComponent::MainComponent() :
-deviceScanner (deviceManager), settingsWindow ("Settings", juce::Colours::black, true)
+MainComponent::MainComponent() : deviceScanner (deviceManager), settingsUI (deviceManager)
 {
     setSize (800, 600);
 
@@ -20,26 +19,9 @@ deviceScanner (deviceManager), settingsWindow ("Settings", juce::Colours::black,
     // Device manager broadcasts when a new device is connected
     deviceManager.addChangeListener (&deviceScanner);
     
-    settingsButton.setButtonText ("Settings");
-    settingsButton.setToggleable (false);
-    
-    // Creates a new window with our audio device selector component
-    settingsButton.onClick = [&]()
-    {
-        juce::DialogWindow::LaunchOptions windowOptions;
-        windowOptions.dialogTitle = "Settings";
-        windowOptions.useNativeTitleBar = true;
-        windowOptions.content.setOwned (new juce::AudioDeviceSelectorComponent (deviceManager, 2, 8, 2, 8, true, true, false, false));
-        windowOptions.content->setSize (800, 600);
-        windowOptions.launchAsync();
-    };
-    
-    //addAndMakeVisible (audioDeviceSelector);
-    addAndMakeVisible (settingsButton);
-    
+    addAndMakeVisible (settingsUI);
     addAndMakeVisible (audioPlayerUI1);
-    
-    //fileIsLoaded = audioPlayerData1.loadSong();
+    addAndMakeVisible (audioPlayerUI2);
 }
 
 MainComponent::~MainComponent()
@@ -76,8 +58,11 @@ void MainComponent::paint (juce::Graphics& g)
 
 void MainComponent::resized()
 {
-    audioPlayerUI1.setBounds (0, 0, getWidth(), getHeight());
-    settingsButton.setBounds (10, 10, 100, 50);
+    auto pad = 10;
+    
+    settingsUI.setBounds (10, 10, 100, 50);
+    audioPlayerUI1.setBounds (10, settingsUI.getBottom() + pad, 350, 250);
+    audioPlayerUI2.setBounds (audioPlayerUI1.getRight() + pad, settingsUI.getBottom() + pad, 350, 250);
 }
 
 

@@ -69,10 +69,10 @@ void AudioPlayerUI::resized()
 {
     auto w = 100;
     auto h = 50;
+    auto pad = 10;
     
-    loadAudioButton.setBounds (10, 200, w, h);
-    playAudioButton.setBounds (10, 260, w, h);
-    stopAudioButton.setBounds (10, 320, w, h);
-    
-    gainSlider.setBounds (120, 200, 50, 170);
+    loadAudioButton.setBounds (5, 5, w, h);
+    playAudioButton.setBounds (loadAudioButton.getRight() + pad, 5, w, h);
+    stopAudioButton.setBounds (playAudioButton.getRight() + pad, 5, w, h);
+    gainSlider.setBounds (0, loadAudioButton.getBottom() + pad, 50, 150);
 }
