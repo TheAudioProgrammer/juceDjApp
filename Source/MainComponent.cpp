@@ -3,7 +3,7 @@
 //==============================================================================
 MainComponent::MainComponent() : deviceScanner (deviceManager), settingsUI (deviceManager)
 {
-    setSize (800, 600);
+    setSize (1600, 1200);
 
     if (juce::RuntimePermissions::isRequired (juce::RuntimePermissions::recordAudio)
         && ! juce::RuntimePermissions::isGranted (juce::RuntimePermissions::recordAudio))
@@ -53,7 +53,7 @@ void MainComponent::releaseResources()
 //==============================================================================
 void MainComponent::paint (juce::Graphics& g)
 {
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+    g.fillAll (juce::Colours::dimgrey);
 }
 
 void MainComponent::resized()
@@ -61,8 +61,8 @@ void MainComponent::resized()
     auto pad = 10;
     
     settingsUI.setBounds (10, 10, 100, 50);
-    audioPlayerUI1.setBounds (10, settingsUI.getBottom() + pad, 350, 250);
-    audioPlayerUI2.setBounds (audioPlayerUI1.getRight() + pad, settingsUI.getBottom() + pad, 350, 250);
+    audioPlayerUI1.setBounds (10, settingsUI.getBottom() + pad, 600, 300);
+    //audioPlayerUI2.setBounds (audioPlayerUI1.getRight() + pad, settingsUI.getBottom() + pad, 350, 250);
 }
 
 

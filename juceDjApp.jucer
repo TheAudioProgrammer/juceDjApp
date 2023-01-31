@@ -32,8 +32,10 @@
       </GROUP>
     </GROUP>
     <GROUP id="{7CCF436D-D388-D038-239C-B5E0B613457A}" name="Settings">
-      <FILE id="ZQSDUZ" name="SettingsUI.cpp" compile="1" resource="0" file="Source/Settings/UI/SettingsUI.cpp"/>
-      <FILE id="IQswId" name="SettingsUI.h" compile="0" resource="0" file="Source/Settings/UI/SettingsUI.h"/>
+      <GROUP id="{FFEDCF0D-C747-3341-D250-617E30DCE777}" name="UI">
+        <FILE id="ZQSDUZ" name="SettingsUI.cpp" compile="1" resource="0" file="Source/Settings/UI/SettingsUI.cpp"/>
+        <FILE id="IQswId" name="SettingsUI.h" compile="0" resource="0" file="Source/Settings/UI/SettingsUI.h"/>
+      </GROUP>
     </GROUP>
     <GROUP id="{8C73DC0F-B249-69D7-B4A3-1933DDA325B0}" name="State">
       <FILE id="B4NRkA" name="AudioPlayerState.h" compile="0" resource="0"
