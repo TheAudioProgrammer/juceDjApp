@@ -15,11 +15,11 @@ AudioPlayerData::AudioPlayerData()
     audioFormatManager.registerBasicFormats();
 }
 
-bool AudioPlayerData::loadSong()
+bool AudioPlayerData::loadTrack()
 {
     DBG ("Load button clicked");
     
-    songSelector = std::make_unique<juce::FileChooser>("Select a song to play", juce::File::getSpecialLocation (juce::File::SpecialLocationType::userDesktopDirectory), audioFormatManager.getWildcardForAllFormats());
+    songSelector = std::make_unique<juce::FileChooser>("Select a track to play", juce::File::getSpecialLocation (juce::File::SpecialLocationType::userDesktopDirectory), audioFormatManager.getWildcardForAllFormats());
     
     auto songSelectorFlags = juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles;
     
@@ -37,6 +37,16 @@ bool AudioPlayerData::loadSong()
             audioSourceBuffer.setSize (reader->numChannels, numSamples);
             jassert (numSamples > 0 && reader->numChannels > 0);
             
+            // If we have metadata, load it!  Otherwise fall back to file name as track
+            if (reader->metadataValues.size() > 0)
+                loadMetadata (*reader);
+            else
+                trackName = musicFile.getFileNameWithoutExtension();
+            
+            trackLength = juce::String { reader->lengthInSamples / reader->sampleRate };
+            
+            sendChangeMessage();
+            
             // Was the file load successful?
             return reader->read (&audioSourceBuffer, 0, numSamples, 0, true, true);
         }
@@ -45,6 +55,18 @@ bool AudioPlayerData::loadSong()
     });
     
     return false;
+}
+
+void AudioPlayerData::loadMetadata (juce::AudioFormatReader& reader)
+{
+    auto metadata = reader.metadataValues;
+    auto metadataKeys = metadata.getAllKeys();
+    
+    for (int i = 0; i < metadata.size(); i++)
+    {
+        auto value = metadata.getValue (metadataKeys[i], "");
+        std::cout << "Key: " << metadataKeys[i] << " Value: " << value << std::endl;
+    }
 }
 
 void AudioPlayerData::prepareToPlay (int numChannels, int samplesPerBlock, double sampleRate)

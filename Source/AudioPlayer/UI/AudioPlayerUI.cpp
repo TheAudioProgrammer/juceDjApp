@@ -21,9 +21,11 @@ AudioPlayerUI::AudioPlayerUI (AudioPlayerData& p) : audioPlayerData(p)
     addAndMakeVisible (playAudioButton);
     addAndMakeVisible (stopAudioButton);
     
+    audioPlayerData.addChangeListener (this);
+    
     loadAudioButton.onClick = [&]()
     {
-        audioPlayerData.loadSong();
+        audioPlayerData.loadTrack();
     };
     
     playAudioButton.onClick = [&]()
@@ -49,24 +51,25 @@ AudioPlayerUI::AudioPlayerUI (AudioPlayerData& p) : audioPlayerData(p)
     
     juce::Font f { 24.0f, juce::Font::FontStyleFlags::plain };
     
-    songNameLabel.setFont (f);
-    songNameLabel.setText ("No Song Loaded", juce::NotificationType::dontSendNotification);
-    songNameLabel.setColour (juce::Label::ColourIds::outlineColourId, juce::Colours::white);
-    addAndMakeVisible (songNameLabel);
+    trackNameLabel.setFont (f);
+    trackNameLabel.setText ("No track Loaded", juce::NotificationType::dontSendNotification);
+    trackNameLabel.setColour (juce::Label::ColourIds::outlineColourId, juce::Colours::white);
+    addAndMakeVisible (trackNameLabel);
     
     artistNameLabel.setFont (f);
     artistNameLabel.setText ("No Artist", juce::NotificationType::dontSendNotification);
     artistNameLabel.setColour (juce::Label::ColourIds::outlineColourId, juce::Colours::white);
     addAndMakeVisible (artistNameLabel);
     
-    songLengthLabel.setFont (f);
-    songLengthLabel.setText ("00:00.0", juce::NotificationType::dontSendNotification);
-    //songLengthLabel.setColour (juce::Label::ColourIds::outlineColourId, juce::Colours::white);
-    addAndMakeVisible (songLengthLabel);
+    trackLengthLabel.setFont (f);
+    trackLengthLabel.setText ("00:00.0", juce::NotificationType::dontSendNotification);
+    //trackLengthLabel.setColour (juce::Label::ColourIds::outlineColourId, juce::Colours::white);
+    addAndMakeVisible (trackLengthLabel);
 }
 
 AudioPlayerUI::~AudioPlayerUI()
 {
+    audioPlayerData.removeChangeListener (this);
 }
 
 void AudioPlayerUI::paint (juce::Graphics& g)
@@ -101,7 +104,13 @@ void AudioPlayerUI::resized()
     playAudioButton.setBounds (loadAudioButton.getRight() + pad, y, w, h);
     stopAudioButton.setBounds (playAudioButton.getRight() + pad, y, w, h);
     gainSlider.setBounds (x, 70, 50, 150);
-    songNameLabel.setBounds (x, 5, labelWidth, labelHeight);
-    artistNameLabel.setBounds (x, songNameLabel.getBottom(), labelWidth, labelHeight);
-    songLengthLabel.setBounds (275, artistNameLabel.getBottom() + 50, labelWidth / 5, labelHeight);
+    trackNameLabel.setBounds (x, 5, labelWidth, labelHeight);
+    artistNameLabel.setBounds (x, trackNameLabel.getBottom(), labelWidth, labelHeight);
+    trackLengthLabel.setBounds (275, artistNameLabel.getBottom() + 50, labelWidth / 5, labelHeight);
+}
+
+void AudioPlayerUI::changeListenerCallback (juce::ChangeBroadcaster* source)
+{
+    trackNameLabel.setText (audioPlayerData.getTrackName(), juce::dontSendNotification);
+    trackLengthLabel.setText (audioPlayerData.getTrackLength(), juce::dontSendNotification);
 }

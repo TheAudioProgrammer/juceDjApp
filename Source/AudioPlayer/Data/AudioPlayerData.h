@@ -14,18 +14,23 @@
 #include "../../State/AudioPlayerState.h"
 
 
-class AudioPlayerData
+class AudioPlayerData : public juce::ChangeBroadcaster
 {
 public:
     AudioPlayerData();
-    bool loadSong();
+    bool loadTrack();
     void prepareToPlay (int numChannels, int samplesPerBlock, double sampleRate);
     void processAudio (const juce::AudioSourceChannelInfo& bufferToFill);
     void setDecibelValue (float value);
     AudioPlayerState getPlayState() const { return playState; }
     void setPlayState (AudioPlayerState newState) { playState = newState; }
+    juce::String getArtistName() const { return artistName; }
+    juce::String getTrackName() const { return trackName; }
+    juce::String getTrackLength() const { return trackLength; }
     
 private:
+    void loadMetadata (juce::AudioFormatReader& reader);
+    
     /* Necessary to register and stream audio formats */
     juce::AudioFormatManager audioFormatManager;
     
@@ -49,6 +54,10 @@ private:
     
     /* Holds the state of our player (for now) */
     AudioPlayerState playState { AudioPlayerState::Stopped };
+    
+    juce::String artistName { "" };
+    juce::String trackName { "" };
+    juce::String trackLength { "" };
 };
 
 
