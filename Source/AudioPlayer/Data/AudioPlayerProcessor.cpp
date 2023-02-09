@@ -15,46 +15,29 @@ AudioPlayerProcessor::AudioPlayerProcessor()
     audioFormatManager.registerBasicFormats();
 }
 
-bool AudioPlayerProcessor::loadTrack()
+void AudioPlayerProcessor::loadTrack (const juce::File& musicFile)
 {
-    DBG ("Load button clicked");
+    auto* r = audioFormatManager.createReaderFor (musicFile);
+    std::unique_ptr<juce::AudioFormatReader> reader (r);
     
-    songSelector = std::make_unique<juce::FileChooser>("Select a track to play", juce::File::getSpecialLocation (juce::File::SpecialLocationType::userDesktopDirectory), audioFormatManager.getWildcardForAllFormats());
-    
-    auto songSelectorFlags = juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles;
-    
-    songSelector->launchAsync (songSelectorFlags, [&] (const juce::FileChooser& chooser)
+    if (reader)
     {
-        juce::File musicFile = chooser.getResult();
+        auto numSamples = static_cast<int>(reader->lengthInSamples);
         
-        auto* r = audioFormatManager.createReaderFor (musicFile);
-        std::unique_ptr<juce::AudioFormatReader> reader (r);
+        audioSourceBuffer.setSize (reader->numChannels, numSamples);
+        jassert (numSamples > 0 && reader->numChannels > 0);
         
-        if (reader)
-        {
-            auto numSamples = static_cast<int>(reader->lengthInSamples);
-            
-            audioSourceBuffer.setSize (reader->numChannels, numSamples);
-            jassert (numSamples > 0 && reader->numChannels > 0);
-            
-            // If we have metadata, load it!  Otherwise fall back to file name as track
-            if (reader->metadataValues.size() > 0)
-                loadMetadata (*reader);
-            else
-                trackName = musicFile.getFileNameWithoutExtension();
-            
-            trackLength = juce::String { reader->lengthInSamples / reader->sampleRate };
-            
-            sendChangeMessage();
-            
-            // Was the file load successful?
-            return reader->read (&audioSourceBuffer, 0, numSamples, 0, true, true);
-        }
+        // If we have metadata, load it!  Otherwise fall back to file name as track
+        if (reader->metadataValues.size() > 0)
+            loadMetadata (*reader);
+        else
+            state.metadata.trackName = musicFile.getFileNameWithoutExtension();
         
-        return false;
-    });
-    
-    return false;
+        state.metadata.trackLength = juce::String { reader->lengthInSamples / reader->sampleRate };
+        
+        bool wasLoadSuccessful = reader->read (&audioSourceBuffer, 0, numSamples, 0, true, true);
+        state.setLoaded (wasLoadSuccessful);
+    }
 }
 
 void AudioPlayerProcessor::loadMetadata (juce::AudioFormatReader& reader)
@@ -74,7 +57,13 @@ void AudioPlayerProcessor::prepareToPlay (int numChannels, int samplesPerBlock, 
     playerBuffer.setSize (numChannels, samplesPerBlock);
 }
 
-void AudioPlayerProcessor::processAudio (const juce::AudioSourceChannelInfo& bufferToFill)
+void AudioPlayerProcessor::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
+{
+    if (state.hasLoadedFile && state.isPlaying)
+        processAudio (bufferToFill);
+}
+
+void AudioPlayerProcessor::processAudio (const juce::AudioSourceChannelInfo &bufferToFill)
 {
     auto* mainBuffer = bufferToFill.buffer;
     
@@ -94,6 +83,16 @@ void AudioPlayerProcessor::processAudio (const juce::AudioSourceChannelInfo& buf
     }
     
     readPosition+=mainBuffer->getNumSamples();
+}
+
+void AudioPlayerProcessor::play()
+{
+    state.setPlaying (true);
+}
+
+void AudioPlayerProcessor::stop()
+{
+    state.setPlaying (false);
 }
 
 void AudioPlayerProcessor::setDecibelValue (float value)

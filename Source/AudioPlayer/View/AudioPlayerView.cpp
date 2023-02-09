@@ -11,7 +11,7 @@
 #include "AudioPlayerView.h"
 
 //==============================================================================
-AudioPlayerView::AudioPlayerView (AudioPlayerProcessor& p) : playerProcessor(p)
+AudioPlayerView::AudioPlayerView (AudioPlayerState& s) : state(s)
 {
     loadAudioButton.setButtonText ("Load");
     playAudioButton.setButtonText ("Play");
@@ -20,21 +20,19 @@ AudioPlayerView::AudioPlayerView (AudioPlayerProcessor& p) : playerProcessor(p)
     addAndMakeVisible (playAudioButton);
     addAndMakeVisible (stopAudioButton);
     
-    playerProcessor.addChangeListener (this);
-    
     loadAudioButton.onClick = [&]()
     {
-        playerProcessor.loadTrack();
+        onLoad();
     };
     
     playAudioButton.onClick = [&]()
     {
-        playerProcessor.setPlayState (AudioPlayerState::Playing);
+        onPlay();
     };
     
     stopAudioButton.onClick = [&]()
     {
-        playerProcessor.setPlayState (AudioPlayerState::Stopped);
+        onStop();
     };
     
     // Values set in dBFS!!
@@ -43,7 +41,7 @@ AudioPlayerView::AudioPlayerView (AudioPlayerProcessor& p) : playerProcessor(p)
     
     gainSlider.onValueChange = [&]()
     {
-        playerProcessor.setDecibelValue (gainSlider.getValue());
+        onGainChange();
     };
     
     addAndMakeVisible (gainSlider);
@@ -64,11 +62,13 @@ AudioPlayerView::AudioPlayerView (AudioPlayerProcessor& p) : playerProcessor(p)
     trackLengthLabel.setText ("00:00.0", juce::NotificationType::dontSendNotification);
     //trackLengthLabel.setColour (juce::Label::ColourIds::outlineColourId, juce::Colours::white);
     addAndMakeVisible (trackLengthLabel);
+    
+    state.addChangeListener (this);
 }
 
 AudioPlayerView::~AudioPlayerView()
 {
-    playerProcessor.removeChangeListener (this);
+    state.removeChangeListener (this);
 }
 
 void AudioPlayerView::paint (juce::Graphics& g)
@@ -110,6 +110,12 @@ void AudioPlayerView::resized()
 
 void AudioPlayerView::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
-    trackNameLabel.setText (playerProcessor.getTrackName(), juce::dontSendNotification);
-    trackLengthLabel.setText (playerProcessor.getTrackLength(), juce::dontSendNotification);
+    if (source == &state)
+        update();
+}
+
+void AudioPlayerView::update()
+{
+    trackNameLabel.setText (state.metadata.trackName, juce::dontSendNotification);
+    trackLengthLabel.setText (state.metadata.trackLength, juce::dontSendNotification);
 }

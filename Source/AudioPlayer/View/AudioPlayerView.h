@@ -11,7 +11,8 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "../Data/AudioPlayerProcessor.h"
+#include "../State/AudioPlayerState.h"
+
 
 
 //==============================================================================
@@ -20,7 +21,7 @@
 class AudioPlayerView : public juce::Component, public juce::ChangeListener
 {
 public:
-    AudioPlayerView (AudioPlayerProcessor& p);
+    AudioPlayerView (AudioPlayerState& s);
     ~AudioPlayerView() override;
 
     void paint (juce::Graphics&) override;
@@ -28,9 +29,19 @@ public:
     
     // From ChangeListener
     void changeListenerCallback (juce::ChangeBroadcaster* source) override;
+    
+    double getGainSliderValue() const { return gainSlider.getValue(); }
+    
+    // Lambdas to control -- we aren't giving the view direct access to the processor.  
+    std::function<void()> onPlay = [](){};
+    std::function<void()> onStop = [](){};
+    std::function<void()> onLoad = [](){};
+    std::function<void()> onGainChange = [](){};
 
 private:
-    AudioPlayerProcessor& playerProcessor;
+    void update();
+    
+    AudioPlayerState& state;
     juce::TextButton loadAudioButton { "Load" };
     juce::TextButton playAudioButton { "Play" };
     juce::TextButton stopAudioButton { "Stop" };

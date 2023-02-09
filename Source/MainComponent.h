@@ -4,12 +4,12 @@
 
 // Data
 #include "MixerDevice/Data/MixerDeviceScanner.h"
-#include "AudioPlayer/Data/AudioPlayerProcessor.h"
 
 // UI
 #include "Settings/View/SettingsView.h"
-#include "AudioPlayer/View/AudioPlayerView.h"
 
+// Encapsulated objects (UI, Data & State)
+#include "AudioPlayer/AudioPlayer.h"
 
 
 
@@ -41,10 +41,8 @@ private:
     MixerDeviceScanner deviceScanner;
     
     SettingsView settingsView;
-
-    // Player UI is controlling Data
-    AudioPlayerProcessor playerProcessor1;
-    AudioPlayerView playerView1 { playerProcessor1 };
+    
+    AudioPlayer audioPlayer1;
     
     bool fileIsLoaded { false };
 

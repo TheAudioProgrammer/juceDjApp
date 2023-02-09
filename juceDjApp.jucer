@@ -10,6 +10,11 @@
             file="Source/MainComponent.cpp"/>
     </GROUP>
     <GROUP id="{7490D2AA-233C-DCA0-97EE-56CC3AA5AE72}" name="AudioPlayer">
+      <FILE id="hKmudH" name="AudioPlayer.h" compile="0" resource="0" file="Source/AudioPlayer/AudioPlayer.h"/>
+      <GROUP id="{8C73DC0F-B249-69D7-B4A3-1933DDA325B0}" name="State">
+        <FILE id="hTPDcM" name="AudioPlayerState.h" compile="0" resource="0"
+              file="Source/AudioPlayer/State/AudioPlayerState.h"/>
+      </GROUP>
       <GROUP id="{26D24715-2B6F-AC1F-7079-A63EBFD1BECD}" name="Data">
         <FILE id="ISfNRI" name="AudioPlayerProcessor.cpp" compile="1" resource="0"
               file="Source/AudioPlayer/Data/AudioPlayerProcessor.cpp"/>
@@ -38,10 +43,6 @@
               file="Source/Settings/View/SettingsView.cpp"/>
         <FILE id="iTSADu" name="SettingsView.h" compile="0" resource="0" file="Source/Settings/View/SettingsView.h"/>
       </GROUP>
-    </GROUP>
-    <GROUP id="{8C73DC0F-B249-69D7-B4A3-1933DDA325B0}" name="State">
-      <FILE id="B4NRkA" name="AudioPlayerState.h" compile="0" resource="0"
-            file="Source/State/AudioPlayerState.h"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1"/>

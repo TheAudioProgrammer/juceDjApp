@@ -20,8 +20,7 @@ MainComponent::MainComponent() : deviceScanner (deviceManager), settingsView (de
     deviceManager.addChangeListener (&deviceScanner);
     
     addAndMakeVisible (settingsView);
-    addAndMakeVisible (playerView1);
-    //addAndMakeVisible (audioPlayerView2);
+    addAndMakeVisible (audioPlayer1.view);
 }
 
 MainComponent::~MainComponent()
@@ -34,15 +33,13 @@ MainComponent::~MainComponent()
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
     // Assuming this is a stereo setup for each track
-    playerProcessor1.prepareToPlay (2 , samplesPerBlockExpected, sampleRate);
+    audioPlayer1.processor.prepareToPlay (2 , samplesPerBlockExpected, sampleRate);
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
 {
     bufferToFill.clearActiveBufferRegion();
-    
-    if (playerProcessor1.getPlayState() == AudioPlayerState::Playing)
-        playerProcessor1.processAudio (bufferToFill);
+    audioPlayer1.processor.getNextAudioBlock (bufferToFill);
 }
 
 void MainComponent::releaseResources()
@@ -61,8 +58,7 @@ void MainComponent::resized()
     auto pad = 10;
     
     settingsView.setBounds (10, 10, 100, 50);
-    playerView1.setBounds (10, settingsView.getBottom() + pad, 600, 300);
-    //audioPlayerUI2.setBounds (audioPlayerUI1.getRight() + pad, settingsUI.getBottom() + pad, 350, 250);
+    audioPlayer1.view.setBounds (10, settingsView.getBottom() + pad, 600, 300);
 }
 
 

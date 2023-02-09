@@ -11,38 +11,33 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "../State/AudioPlayerState.h"
 
 
-enum class AudioPlayerState
-{
-    Stopped,
-    Playing,
-};
 
 //================================================================================
 
-class AudioPlayerProcessor : public juce::ChangeBroadcaster
+class AudioPlayerProcessor 
 {
 public:
     AudioPlayerProcessor();
-    bool loadTrack();
+    void loadTrack (const juce::File& musicFile);
     void prepareToPlay (int numChannels, int samplesPerBlock, double sampleRate);
-    void processAudio (const juce::AudioSourceChannelInfo& bufferToFill);
+    void getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill);
+    void play();
+    void stop();
     void setDecibelValue (float value);
-    AudioPlayerState getPlayState() const { return playState; }
-    void setPlayState (AudioPlayerState newState) { playState = newState; }
-    juce::String getArtistName() const { return artistName; }
-    juce::String getTrackName() const { return trackName; }
-    juce::String getTrackLength() const { return trackLength; }
+    AudioPlayerState& getState() { return state; }
+    juce::AudioFormatManager& getAudioFormatManager() { return audioFormatManager; }
     
 private:
     void loadMetadata (juce::AudioFormatReader& reader);
     
+    /* Copies player buffer data to main audio buffer */
+    void processAudio (const juce::AudioSourceChannelInfo& bufferToFill);
+    
     /* Necessary to register and stream audio formats */
     juce::AudioFormatManager audioFormatManager;
-    
-    /* Window to select a track */
-    std::unique_ptr<juce::FileChooser> songSelector;
     
     /* Holds "entire track" in memory */
     juce::AudioBuffer<float> audioSourceBuffer;
@@ -59,12 +54,8 @@ private:
     /* Class member that will hold our conversion from dBFS */
     float rawGain { 1.0f };
     
-    /* Holds the state of our player (for now) */
-    AudioPlayerState playState { AudioPlayerState::Stopped };
-    
-    juce::String artistName { "" };
-    juce::String trackName { "" };
-    juce::String trackLength { "" };
+    /* Holds the state & metadata of our player */
+    AudioPlayerState state;
 };
 
 
