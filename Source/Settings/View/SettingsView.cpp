@@ -1,16 +1,16 @@
 /*
   ==============================================================================
 
-    SettingsUI.cpp
+    SettingsView.cpp
     Created: 30 Jan 2023 2:38:24pm
     Author:  Joshua Hodge
 
   ==============================================================================
 */
 
-#include "SettingsUI.h"
+#include "SettingsView.h"
 
-SettingsUI::SettingsUI (juce::AudioDeviceManager& deviceManager) : settingsWindow ("Settings", juce::Colours::black, true)
+SettingsView::SettingsView (juce::AudioDeviceManager& deviceManager) : settingsWindow ("Settings", juce::Colours::black, true)
 {
     settingsButton.setButtonText ("Settings");
     settingsButton.setToggleable (false);
@@ -29,12 +29,12 @@ SettingsUI::SettingsUI (juce::AudioDeviceManager& deviceManager) : settingsWindo
     addAndMakeVisible (settingsButton);
 }
 
-void SettingsUI::paint (juce::Graphics& g)
+void SettingsView::paint (juce::Graphics& g)
 {
     g.fillAll (juce::Colours::black);
 }
 
-void SettingsUI::resized()
+void SettingsView::resized()
 {
     settingsButton.setBounds (0, 0, 100, 50);
 }

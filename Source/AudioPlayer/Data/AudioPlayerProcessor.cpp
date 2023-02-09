@@ -1,21 +1,21 @@
 /*
   ==============================================================================
 
-    AudioPlayerData.cpp
+    AudioPlayerProcessor.cpp
     Created: 25 Jan 2023 4:11:19pm
     Author:  Joshua Hodge
 
   ==============================================================================
 */
 
-#include "AudioPlayerData.h"
+#include "AudioPlayerProcessor.h"
 
-AudioPlayerData::AudioPlayerData()
+AudioPlayerProcessor::AudioPlayerProcessor()
 {
     audioFormatManager.registerBasicFormats();
 }
 
-bool AudioPlayerData::loadTrack()
+bool AudioPlayerProcessor::loadTrack()
 {
     DBG ("Load button clicked");
     
@@ -57,7 +57,7 @@ bool AudioPlayerData::loadTrack()
     return false;
 }
 
-void AudioPlayerData::loadMetadata (juce::AudioFormatReader& reader)
+void AudioPlayerProcessor::loadMetadata (juce::AudioFormatReader& reader)
 {
     auto metadata = reader.metadataValues;
     auto metadataKeys = metadata.getAllKeys();
@@ -69,12 +69,12 @@ void AudioPlayerData::loadMetadata (juce::AudioFormatReader& reader)
     }
 }
 
-void AudioPlayerData::prepareToPlay (int numChannels, int samplesPerBlock, double sampleRate)
+void AudioPlayerProcessor::prepareToPlay (int numChannels, int samplesPerBlock, double sampleRate)
 {
     playerBuffer.setSize (numChannels, samplesPerBlock);
 }
 
-void AudioPlayerData::processAudio (const juce::AudioSourceChannelInfo& bufferToFill)
+void AudioPlayerProcessor::processAudio (const juce::AudioSourceChannelInfo& bufferToFill)
 {
     auto* mainBuffer = bufferToFill.buffer;
     
@@ -96,7 +96,7 @@ void AudioPlayerData::processAudio (const juce::AudioSourceChannelInfo& bufferTo
     readPosition+=mainBuffer->getNumSamples();
 }
 
-void AudioPlayerData::setDecibelValue (float value)
+void AudioPlayerProcessor::setDecibelValue (float value)
 {
     rawGain = juce::Decibels::decibelsToGain (value);
 }

@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    AudioPlayerData.h
+    AudioPlayerProcessor.h
     Created: 25 Jan 2023 4:11:19pm
     Author:  Joshua Hodge
 
@@ -11,13 +11,20 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "../../State/AudioPlayerState.h"
 
 
-class AudioPlayerData : public juce::ChangeBroadcaster
+enum class AudioPlayerState
+{
+    Stopped,
+    Playing,
+};
+
+//================================================================================
+
+class AudioPlayerProcessor : public juce::ChangeBroadcaster
 {
 public:
-    AudioPlayerData();
+    AudioPlayerProcessor();
     bool loadTrack();
     void prepareToPlay (int numChannels, int samplesPerBlock, double sampleRate);
     void processAudio (const juce::AudioSourceChannelInfo& bufferToFill);

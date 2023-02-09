@@ -1,7 +1,7 @@
 #include "MainComponent.h"
 
 //==============================================================================
-MainComponent::MainComponent() : deviceScanner (deviceManager), settingsUI (deviceManager)
+MainComponent::MainComponent() : deviceScanner (deviceManager), settingsView (deviceManager)
 {
     setSize (1600, 1200);
 
@@ -19,9 +19,9 @@ MainComponent::MainComponent() : deviceScanner (deviceManager), settingsUI (devi
     // Device manager broadcasts when a new device is connected
     deviceManager.addChangeListener (&deviceScanner);
     
-    addAndMakeVisible (settingsUI);
-    addAndMakeVisible (audioPlayerUI1);
-    addAndMakeVisible (audioPlayerUI2);
+    addAndMakeVisible (settingsView);
+    addAndMakeVisible (playerView1);
+    //addAndMakeVisible (audioPlayerView2);
 }
 
 MainComponent::~MainComponent()
@@ -34,15 +34,15 @@ MainComponent::~MainComponent()
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
     // Assuming this is a stereo setup for each track
-    audioPlayerData1.prepareToPlay (2 , samplesPerBlockExpected, sampleRate);
+    playerProcessor1.prepareToPlay (2 , samplesPerBlockExpected, sampleRate);
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
 {
     bufferToFill.clearActiveBufferRegion();
     
-    if (audioPlayerData1.getPlayState() == AudioPlayerState::Playing)
-        audioPlayerData1.processAudio (bufferToFill);
+    if (playerProcessor1.getPlayState() == AudioPlayerState::Playing)
+        playerProcessor1.processAudio (bufferToFill);
 }
 
 void MainComponent::releaseResources()
@@ -60,8 +60,8 @@ void MainComponent::resized()
 {
     auto pad = 10;
     
-    settingsUI.setBounds (10, 10, 100, 50);
-    audioPlayerUI1.setBounds (10, settingsUI.getBottom() + pad, 600, 300);
+    settingsView.setBounds (10, 10, 100, 50);
+    playerView1.setBounds (10, settingsView.getBottom() + pad, 600, 300);
     //audioPlayerUI2.setBounds (audioPlayerUI1.getRight() + pad, settingsUI.getBottom() + pad, 350, 250);
 }
 

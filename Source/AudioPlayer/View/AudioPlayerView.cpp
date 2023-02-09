@@ -1,18 +1,17 @@
 /*
   ==============================================================================
 
-    AudioPlayerUI.cpp
+    AudioPlayerView.cpp
     Created: 25 Jan 2023 4:12:07pm
     Author:  Joshua Hodge
 
   ==============================================================================
 */
 
-#include <JuceHeader.h>
-#include "AudioPlayerUI.h"
+#include "AudioPlayerView.h"
 
 //==============================================================================
-AudioPlayerUI::AudioPlayerUI (AudioPlayerData& p) : audioPlayerData(p)
+AudioPlayerView::AudioPlayerView (AudioPlayerProcessor& p) : playerProcessor(p)
 {
     loadAudioButton.setButtonText ("Load");
     playAudioButton.setButtonText ("Play");
@@ -21,21 +20,21 @@ AudioPlayerUI::AudioPlayerUI (AudioPlayerData& p) : audioPlayerData(p)
     addAndMakeVisible (playAudioButton);
     addAndMakeVisible (stopAudioButton);
     
-    audioPlayerData.addChangeListener (this);
+    playerProcessor.addChangeListener (this);
     
     loadAudioButton.onClick = [&]()
     {
-        audioPlayerData.loadTrack();
+        playerProcessor.loadTrack();
     };
     
     playAudioButton.onClick = [&]()
     {
-        audioPlayerData.setPlayState (AudioPlayerState::Playing);
+        playerProcessor.setPlayState (AudioPlayerState::Playing);
     };
     
     stopAudioButton.onClick = [&]()
     {
-        audioPlayerData.setPlayState (AudioPlayerState::Stopped);
+        playerProcessor.setPlayState (AudioPlayerState::Stopped);
     };
     
     // Values set in dBFS!!
@@ -44,7 +43,7 @@ AudioPlayerUI::AudioPlayerUI (AudioPlayerData& p) : audioPlayerData(p)
     
     gainSlider.onValueChange = [&]()
     {
-        audioPlayerData.setDecibelValue (gainSlider.getValue());
+        playerProcessor.setDecibelValue (gainSlider.getValue());
     };
     
     addAndMakeVisible (gainSlider);
@@ -67,12 +66,12 @@ AudioPlayerUI::AudioPlayerUI (AudioPlayerData& p) : audioPlayerData(p)
     addAndMakeVisible (trackLengthLabel);
 }
 
-AudioPlayerUI::~AudioPlayerUI()
+AudioPlayerView::~AudioPlayerView()
 {
-    audioPlayerData.removeChangeListener (this);
+    playerProcessor.removeChangeListener (this);
 }
 
-void AudioPlayerUI::paint (juce::Graphics& g)
+void AudioPlayerView::paint (juce::Graphics& g)
 {
     g.fillAll (juce::Colours::black);
     
@@ -89,7 +88,7 @@ void AudioPlayerUI::paint (juce::Graphics& g)
     g.drawLine (float(discCenter.getX()), float(discCenter.getY()), discArea.getX() + (discArea.getWidth() / 2.0f), discArea.getY(), 10.0f);
 }
 
-void AudioPlayerUI::resized()
+void AudioPlayerView::resized()
 {
     // Assuming component is 600 x 300
     auto w = 100;
@@ -109,8 +108,8 @@ void AudioPlayerUI::resized()
     trackLengthLabel.setBounds (275, artistNameLabel.getBottom() + 50, labelWidth / 5, labelHeight);
 }
 
-void AudioPlayerUI::changeListenerCallback (juce::ChangeBroadcaster* source)
+void AudioPlayerView::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
-    trackNameLabel.setText (audioPlayerData.getTrackName(), juce::dontSendNotification);
-    trackLengthLabel.setText (audioPlayerData.getTrackLength(), juce::dontSendNotification);
+    trackNameLabel.setText (playerProcessor.getTrackName(), juce::dontSendNotification);
+    trackLengthLabel.setText (playerProcessor.getTrackLength(), juce::dontSendNotification);
 }

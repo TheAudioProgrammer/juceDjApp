@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    AudioPlayerUI.h
+    AudioPlayerView.h
     Created: 25 Jan 2023 4:12:07pm
     Author:  Joshua Hodge
 
@@ -11,18 +11,17 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "../Data/AudioPlayerData.h"
-#include "../../State/AudioPlayerState.h"
+#include "../Data/AudioPlayerProcessor.h"
 
 
 //==============================================================================
 /*
 */
-class AudioPlayerUI  : public juce::Component, public juce::ChangeListener
+class AudioPlayerView : public juce::Component, public juce::ChangeListener
 {
 public:
-    AudioPlayerUI (AudioPlayerData& p);
-    ~AudioPlayerUI() override;
+    AudioPlayerView (AudioPlayerProcessor& p);
+    ~AudioPlayerView() override;
 
     void paint (juce::Graphics&) override;
     void resized() override;
@@ -31,7 +30,7 @@ public:
     void changeListenerCallback (juce::ChangeBroadcaster* source) override;
 
 private:
-    AudioPlayerData& audioPlayerData;
+    AudioPlayerProcessor& playerProcessor;
     juce::TextButton loadAudioButton { "Load" };
     juce::TextButton playAudioButton { "Play" };
     juce::TextButton stopAudioButton { "Stop" };
@@ -42,5 +41,5 @@ private:
     juce::Label artistNameLabel { "Artist Name" };
     juce::Label trackLengthLabel { "Song Length" };
     
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPlayerUI)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPlayerView)
 };

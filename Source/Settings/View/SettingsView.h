@@ -13,10 +13,10 @@
 #include <JuceHeader.h>
 
 
-class SettingsUI : public juce::Component
+class SettingsView : public juce::Component
 {
 public:
-    SettingsUI(juce::AudioDeviceManager& deviceManager);
+    SettingsView (juce::AudioDeviceManager& deviceManager);
     void paint (juce::Graphics& g) override;
     void resized() override;
     

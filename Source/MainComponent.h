@@ -4,11 +4,11 @@
 
 // Data
 #include "MixerDevice/Data/MixerDeviceScanner.h"
-#include "AudioPlayer/Data/AudioPlayerData.h"
+#include "AudioPlayer/Data/AudioPlayerProcessor.h"
 
 // UI
-#include "Settings/UI/SettingsUI.h"
-#include "AudioPlayer/UI/AudioPlayerUI.h"
+#include "Settings/View/SettingsView.h"
+#include "AudioPlayer/View/AudioPlayerView.h"
 
 
 
@@ -40,14 +40,11 @@ private:
     // Checks our list of USB devices when a new device is connected
     MixerDeviceScanner deviceScanner;
     
-    SettingsUI settingsUI;
+    SettingsView settingsView;
 
     // Player UI is controlling Data
-    AudioPlayerData audioPlayerData1;
-    AudioPlayerUI audioPlayerUI1 { audioPlayerData1 };
-    
-    AudioPlayerData audioPlayerData2;
-    AudioPlayerUI audioPlayerUI2 { audioPlayerData2 };
+    AudioPlayerProcessor playerProcessor1;
+    AudioPlayerView playerView1 { playerProcessor1 };
     
     bool fileIsLoaded { false };
 
