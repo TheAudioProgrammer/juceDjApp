@@ -81,13 +81,14 @@ void AudioPlayerView::paint (juce::Graphics& g)
     
     juce::Rectangle<float> discArea { 375.0f, static_cast<float>(artistNameLabel.getBottom()) + 25.0f, 180.0f, 180.0f };
     auto discCenter = discArea.getCentre();
-    auto diameter { 20 };
-    auto radius { diameter / 2 };
+    auto radius { discArea.getWidth() / 2.0f };
     
     g.drawEllipse (discArea, 10.0f);
-    g.fillEllipse (discCenter.getX() - radius, discCenter.getY() - radius, diameter, diameter);
+    g.fillEllipse (discCenter.getX() - 10.0f, discCenter.getY() - 10.0f, 20.0f, 20.0f);
     
-    g.drawLine (float(discCenter.getX()), float(discCenter.getY()), discArea.getX() + (discArea.getWidth() / 2.0f), discArea.getY(), 10.0f);
+    g.drawLine (float(discCenter.getX()), float(discCenter.getY()), float(discArea.getX() + radius), discArea.getY(), 10.0f);
+    
+    trackLengthLabel.setText (metadata.trackCurrentTime, juce::dontSendNotification);
 }
 
 void AudioPlayerView::resized()
@@ -119,5 +120,5 @@ void AudioPlayerView::changeListenerCallback (juce::ChangeBroadcaster* source)
 void AudioPlayerView::update()
 {
     trackNameLabel.setText (metadata.trackName, juce::dontSendNotification);
-    trackLengthLabel.setText (metadata.trackLength, juce::dontSendNotification);
+    trackLengthLabel.setText (metadata.trackCurrentTime, juce::dontSendNotification);
 }

@@ -20,7 +20,7 @@ MainComponent::MainComponent() : deviceScanner (deviceManager), settingsView (de
     deviceManager.addChangeListener (&deviceScanner);
     
     addAndMakeVisible (settingsView);
-    addAndMakeVisible (audioPlayer1.view);
+    addAndMakeVisible (audioPlayer1.view);    
 }
 
 MainComponent::~MainComponent()
@@ -60,6 +60,7 @@ void MainComponent::resized()
     settingsView.setBounds (10, 10, 100, 50);
     audioPlayer1.view.setBounds (10, settingsView.getBottom() + pad, 600, 300);
 }
+
 
 
 

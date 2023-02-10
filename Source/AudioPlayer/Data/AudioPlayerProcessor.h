@@ -27,12 +27,16 @@ public:
     void play();
     void stop();
     void setDecibelValue (float value);
+    void convertSamplesToTime();
     AudioPlayerState& getState() { return state; }
     AudioMetadata& getMetadata() { return metadata; }
     juce::AudioFormatManager& getAudioFormatManager() { return audioFormatManager; }
     
 private:
     void loadMetadata (juce::AudioFormatReader& reader);
+    
+    /* Helper to ensure time is always "00" rather than "0" until it gets to "10" */
+    juce::String convertTimeToString (double time);
     
     /* Copies player buffer data to main audio buffer */
     void processAudio (const juce::AudioSourceChannelInfo& bufferToFill);
@@ -48,6 +52,12 @@ private:
     
     /* How far we are in the track */
     int readPosition { 0 };
+    
+    /* How many samples are in the track */
+    juce::int64 trackNumSamples { 0 };
+    
+    /* Current sample rate of the soundcard */
+    double currentSampleRate { 0.0 };
     
     /* Ensure our file is loaded before trying to access it */
     bool fileIsLoaded { false };

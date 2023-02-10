@@ -17,6 +17,7 @@ struct AudioMetadata
 {
     juce::String artistName { "" };
     juce::String trackName { "" };
+    juce::String trackCurrentTime { "" };
     juce::String trackLength { "" };
 };
 

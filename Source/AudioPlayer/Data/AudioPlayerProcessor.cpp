@@ -33,11 +33,28 @@ void AudioPlayerProcessor::loadTrack (const juce::File& musicFile)
         else
             metadata.trackName = musicFile.getFileNameWithoutExtension();
         
-        metadata.trackLength = juce::String { reader->lengthInSamples / reader->sampleRate };
+        //metadata.trackLength = juce::String { reader->lengthInSamples / reader->sampleRate };
+        trackNumSamples = reader->lengthInSamples;
         
         bool wasLoadSuccessful = reader->read (&audioSourceBuffer, 0, numSamples, 0, true, true);
         state.setLoaded (wasLoadSuccessful);
     }
+}
+
+/* It'd be much more convenient if we could call this directly in the audio thread, however this could create problems when the message thread wants to access as well, so I'm calling this from "Audioplayer" with a timer */
+void AudioPlayerProcessor::convertSamplesToTime()
+{
+    auto millis =  readPosition / currentSampleRate * 1000.0;
+    auto minutes = millis / 60000.0;
+    auto seconds = (minutes - std::floor (minutes)) * 60.0;
+    auto hundreths = (seconds - std::floor (seconds)) * 100.0;
+    
+    metadata.trackCurrentTime = convertTimeToString (minutes) + ":" + convertTimeToString (seconds) + ":" + convertTimeToString (hundreths);
+}
+
+juce::String AudioPlayerProcessor::convertTimeToString (double time)
+{
+    return time < 10.0 ? "0" + juce::String (std::floor (time)) : juce::String (std::floor (time));
 }
 
 void AudioPlayerProcessor::loadMetadata (juce::AudioFormatReader& reader)
@@ -55,6 +72,7 @@ void AudioPlayerProcessor::loadMetadata (juce::AudioFormatReader& reader)
 void AudioPlayerProcessor::prepareToPlay (int numChannels, int samplesPerBlock, double sampleRate)
 {
     playerBuffer.setSize (numChannels, samplesPerBlock);
+    currentSampleRate = sampleRate;
 }
 
 void AudioPlayerProcessor::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
@@ -81,7 +99,6 @@ void AudioPlayerProcessor::processAudio (const juce::AudioSourceChannelInfo &buf
         // Add samples to main buffer (Note: May want to change this later)
         mainBuffer->addFrom (ch, 0, playerBuffer, ch, 0, mainBuffer->getNumSamples());
     }
-    
     readPosition+=mainBuffer->getNumSamples();
 }
 

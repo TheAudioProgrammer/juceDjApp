@@ -14,7 +14,7 @@
 #include "View/AudioPlayerView.h"
 
 /* Encapsulates audio processing, UI (view), and state into one object that can be easily controlled -- mutual area to pass data around between processor & view */
-struct AudioPlayer
+struct AudioPlayer : public juce::Timer
 {
     AudioPlayer()
     {
@@ -37,6 +37,19 @@ struct AudioPlayer
         {
             processor.setDecibelValue (view.getGainSliderValue());
         };
+        
+        startTimerHz (30.0f);
+    }
+    
+    ~AudioPlayer()
+    {
+        stopTimer();
+    }
+    
+    void timerCallback()
+    {
+        processor.convertSamplesToTime();
+        view.repaint();
     }
     
     AudioPlayerProcessor processor;

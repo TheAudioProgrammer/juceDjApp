@@ -35,6 +35,9 @@ public:
     //==============================================================================
     void paint (juce::Graphics& g) override;
     void resized() override;
+    
+    //==============================================================================
+    // From Timer
 
 private:
     // Checks our list of USB devices when a new device is connected
