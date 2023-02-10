@@ -57,9 +57,9 @@ juce::String AudioPlayerProcessor::convertTimeToString (double time)
     return time < 10.0 ? "0" + juce::String (std::floor (time)) : juce::String (std::floor (time));
 }
 
-int AudioPlayerProcessor::getPercentagePlayedInTrack()
+float AudioPlayerProcessor::getPercentagePlayedInTrack()
 {
-    return readPosition > 0 ? juce::jmap<int>(readPosition, 1, int(trackNumSamples), 0, 100) : 0;
+    return readPosition > 0.0f ? juce::jmap<float>(float(readPosition), 1.0f, float(trackNumSamples), 0.0f, 100.0f) : 0.0f;
 }
 
 void AudioPlayerProcessor::loadMetadata (juce::AudioFormatReader& reader)

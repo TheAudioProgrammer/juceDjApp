@@ -28,7 +28,7 @@ public:
     void stop();
     void setDecibelValue (float value);
     void convertSamplesToTime();
-    int getPercentagePlayedInTrack();
+    float getPercentagePlayedInTrack();
     AudioPlayerState& getState() { return state; }
     AudioMetadata& getMetadata() { return metadata; }
     juce::AudioFormatManager& getAudioFormatManager() { return audioFormatManager; }

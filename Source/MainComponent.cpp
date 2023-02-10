@@ -3,7 +3,7 @@
 //==============================================================================
 MainComponent::MainComponent() : deviceScanner (deviceManager), settingsView (deviceManager)
 {
-    setSize (1600, 1200);
+    setSize (700, 400);
 
     if (juce::RuntimePermissions::isRequired (juce::RuntimePermissions::recordAudio)
         && ! juce::RuntimePermissions::isGranted (juce::RuntimePermissions::recordAudio))

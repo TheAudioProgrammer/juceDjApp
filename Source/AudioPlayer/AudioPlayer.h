@@ -49,7 +49,7 @@ struct AudioPlayer : public juce::Timer
     void timerCallback()
     {
         processor.convertSamplesToTime();
-        processor.getPercentagePlayedInTrack();
+        view.percentageInTrackPlayed = processor.getPercentagePlayedInTrack();
         view.repaint();
     }
     

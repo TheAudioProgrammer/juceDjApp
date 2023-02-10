@@ -37,8 +37,11 @@ public:
     std::function<void()> onStop = [](){};
     std::function<void()> onLoad = [](){};
     std::function<void()> onGainChange = [](){};
+    
+    float percentageInTrackPlayed { 0.0f };
 
 private:
+    void drawDisc (juce::Graphics& g);
     void update();
     
     AudioPlayerState& state;

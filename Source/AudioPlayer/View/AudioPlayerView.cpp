@@ -76,19 +76,34 @@ AudioPlayerView::~AudioPlayerView()
 void AudioPlayerView::paint (juce::Graphics& g)
 {
     g.fillAll (juce::Colours::black);
-    
+    drawDisc (g);
+    trackLengthLabel.setText (metadata.trackCurrentTime, juce::dontSendNotification);
+}
+
+void AudioPlayerView::drawDisc (juce::Graphics& g)
+{
     g.setColour (juce::Colours::white);
     
     juce::Rectangle<float> discArea { 375.0f, static_cast<float>(artistNameLabel.getBottom()) + 25.0f, 180.0f, 180.0f };
-    auto discCenter = discArea.getCentre();
-    auto radius { discArea.getWidth() / 2.0f };
+    juce::Point<float> discCenter = discArea.getCentre();
+    float radius { discArea.getWidth() / 2.0f };
     
+    // Main Disc
     g.drawEllipse (discArea, 10.0f);
     g.fillEllipse (discCenter.getX() - 10.0f, discCenter.getY() - 10.0f, 20.0f, 20.0f);
+      
+    g.drawLine (discCenter.getX(),
+                discCenter.getY(),
+                discCenter.getX() + radius * std::sin (2.0 * juce::MathConstants<float>::pi * percentageInTrackPlayed),
+                discCenter.getY() - radius * std::cos (2.0f * juce::MathConstants<float>::pi * percentageInTrackPlayed),
+                10.0f);
     
-    g.drawLine (float(discCenter.getX()), float(discCenter.getY()), float(discArea.getX() + radius), discArea.getY(), 10.0f);
-    
-    trackLengthLabel.setText (metadata.trackCurrentTime, juce::dontSendNotification);
+    // Completion disc
+    g.setColour (juce::Colours::orange.withAlpha (0.7f));
+    juce::Path path;
+    path.startNewSubPath (discCenter.getX(), discCenter.getY() - radius);
+    path.addCentredArc (discCenter.getX(), discCenter.getY(), radius, radius, 0.0f, 0.0f, (percentageInTrackPlayed * 0.01f) * 2.0f * juce::MathConstants<float>::pi);
+    g.strokePath (path, juce::PathStrokeType (10.0f));
 }
 
 void AudioPlayerView::resized()
