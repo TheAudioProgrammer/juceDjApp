@@ -28,6 +28,7 @@ public:
     void stop();
     void setDecibelValue (float value);
     void convertSamplesToTime();
+    int getPercentagePlayedInTrack();
     AudioPlayerState& getState() { return state; }
     AudioMetadata& getMetadata() { return metadata; }
     juce::AudioFormatManager& getAudioFormatManager() { return audioFormatManager; }
@@ -44,7 +45,7 @@ private:
     /* Necessary to register and stream audio formats */
     juce::AudioFormatManager audioFormatManager;
     
-    /* Holds "entire track" in memory */
+    /* Holds an entire track in memory */
     juce::AudioBuffer<float> audioSourceBuffer;
     
     /* Holds mutable "temp data" where we can change gain / processing etc before being passed to the main output buffer */

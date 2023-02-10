@@ -121,4 +121,5 @@ void AudioPlayerView::update()
 {
     trackNameLabel.setText (metadata.trackName, juce::dontSendNotification);
     trackLengthLabel.setText (metadata.trackCurrentTime, juce::dontSendNotification);
+    repaint();
 }

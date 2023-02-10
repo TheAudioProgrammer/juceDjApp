@@ -57,6 +57,11 @@ juce::String AudioPlayerProcessor::convertTimeToString (double time)
     return time < 10.0 ? "0" + juce::String (std::floor (time)) : juce::String (std::floor (time));
 }
 
+int AudioPlayerProcessor::getPercentagePlayedInTrack()
+{
+    return readPosition > 0 ? juce::jmap<int>(readPosition, 1, int(trackNumSamples), 0, 100) : 0;
+}
+
 void AudioPlayerProcessor::loadMetadata (juce::AudioFormatReader& reader)
 {
     auto metadataValues = reader.metadataValues;
@@ -84,6 +89,12 @@ void AudioPlayerProcessor::getNextAudioBlock (const juce::AudioSourceChannelInfo
 void AudioPlayerProcessor::processAudio (const juce::AudioSourceChannelInfo &bufferToFill)
 {
     auto* mainBuffer = bufferToFill.buffer;
+    auto samplesRemaining = audioSourceBuffer.getNumSamples() - readPosition;
+    
+    /* We want to ensure the amount of samples we're processing is never greater
+     than the amount of samples remaining in the track (that would be bad!). For
+     This reason we can't just blindly copy "buffer->getNumSamples() every time. */
+    auto samplesToProcess = samplesRemaining > mainBuffer->getNumSamples() ? mainBuffer->getNumSamples() : samplesRemaining;
     
     playerBuffer.clear();
     
@@ -93,13 +104,15 @@ void AudioPlayerProcessor::processAudio (const juce::AudioSourceChannelInfo &buf
     
     for (int ch = 0; ch < mainBuffer->getNumChannels(); ch++)
     {
-        playerBuffer.copyFrom (ch, 0, audioSourceBuffer, ch, readPosition, playerBuffer.getNumSamples());
+        playerBuffer.copyFrom (ch, 0, audioSourceBuffer, ch, readPosition, samplesToProcess);
         playerBuffer.applyGain (ch, 0, playerBuffer.getNumSamples(), rawGain);
         
         // Add samples to main buffer (Note: May want to change this later)
-        mainBuffer->addFrom (ch, 0, playerBuffer, ch, 0, mainBuffer->getNumSamples());
+        mainBuffer->addFrom (ch, 0, playerBuffer, ch, 0, samplesToProcess);
     }
-    readPosition+=mainBuffer->getNumSamples();
+    
+    // Move read position along...
+    readPosition+=samplesToProcess;
 }
 
 void AudioPlayerProcessor::play()

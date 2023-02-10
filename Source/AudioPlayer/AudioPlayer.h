@@ -49,6 +49,7 @@ struct AudioPlayer : public juce::Timer
     void timerCallback()
     {
         processor.convertSamplesToTime();
+        processor.getPercentagePlayedInTrack();
         view.repaint();
     }
     
@@ -57,8 +58,6 @@ struct AudioPlayer : public juce::Timer
     
     void loadFile()
     {
-        DBG ("Load button clicked");
-        
         songSelector = std::make_unique<juce::FileChooser>("Select a track to play", juce::File::getSpecialLocation (juce::File::SpecialLocationType::userDesktopDirectory), processor.getAudioFormatManager().getWildcardForAllFormats());
         
         auto songSelectorFlags = juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles;
