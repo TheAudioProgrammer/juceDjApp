@@ -13,7 +13,7 @@
 #include "Data/AudioPlayerProcessor.h"
 #include "View/AudioPlayerView.h"
 
-/* Encapsulates audio processing, UI (view), and state into one object that can be easily controlled -- mutual area to pass data around */
+/* Encapsulates audio processing, UI (view), and state into one object that can be easily controlled -- mutual area to pass data around between processor & view */
 struct AudioPlayer
 {
     AudioPlayer()
@@ -40,7 +40,7 @@ struct AudioPlayer
     }
     
     AudioPlayerProcessor processor;
-    AudioPlayerView view { processor.getState() };
+    AudioPlayerView view { processor.getState(), processor.getMetadata() };
     
     void loadFile()
     {
@@ -56,10 +56,8 @@ struct AudioPlayer
         });
     }
     
-    
 private:
     /* Window to select a track */
     std::unique_ptr<juce::FileChooser> songSelector;
-    
     
 };

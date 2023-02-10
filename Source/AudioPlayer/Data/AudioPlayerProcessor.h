@@ -28,6 +28,7 @@ public:
     void stop();
     void setDecibelValue (float value);
     AudioPlayerState& getState() { return state; }
+    AudioMetadata& getMetadata() { return metadata; }
     juce::AudioFormatManager& getAudioFormatManager() { return audioFormatManager; }
     
 private:
@@ -56,6 +57,7 @@ private:
     
     /* Holds the state & metadata of our player */
     AudioPlayerState state;
+    AudioMetadata metadata;
 };
 
 

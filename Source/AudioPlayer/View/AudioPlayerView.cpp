@@ -11,7 +11,9 @@
 #include "AudioPlayerView.h"
 
 //==============================================================================
-AudioPlayerView::AudioPlayerView (AudioPlayerState& s) : state(s)
+AudioPlayerView::AudioPlayerView (AudioPlayerState& s, AudioMetadata& m)
+: state (s)
+, metadata (m)
 {
     loadAudioButton.setButtonText ("Load");
     playAudioButton.setButtonText ("Play");
@@ -116,6 +118,6 @@ void AudioPlayerView::changeListenerCallback (juce::ChangeBroadcaster* source)
 
 void AudioPlayerView::update()
 {
-    trackNameLabel.setText (state.metadata.trackName, juce::dontSendNotification);
-    trackLengthLabel.setText (state.metadata.trackLength, juce::dontSendNotification);
+    trackNameLabel.setText (metadata.trackName, juce::dontSendNotification);
+    trackLengthLabel.setText (metadata.trackLength, juce::dontSendNotification);
 }

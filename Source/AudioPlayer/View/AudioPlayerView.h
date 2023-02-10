@@ -21,7 +21,7 @@
 class AudioPlayerView : public juce::Component, public juce::ChangeListener
 {
 public:
-    AudioPlayerView (AudioPlayerState& s);
+    AudioPlayerView (AudioPlayerState& s, AudioMetadata& m);
     ~AudioPlayerView() override;
 
     void paint (juce::Graphics&) override;
@@ -42,6 +42,7 @@ private:
     void update();
     
     AudioPlayerState& state;
+    AudioMetadata& metadata;
     juce::TextButton loadAudioButton { "Load" };
     juce::TextButton playAudioButton { "Play" };
     juce::TextButton stopAudioButton { "Stop" };

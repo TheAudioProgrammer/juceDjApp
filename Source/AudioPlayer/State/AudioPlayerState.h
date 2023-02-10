@@ -13,14 +13,14 @@
 #include <JuceHeader.h>
 
 /* Holds loaded track data */
-struct AudioMetaData
+struct AudioMetadata 
 {
     juce::String artistName { "" };
     juce::String trackName { "" };
     juce::String trackLength { "" };
 };
 
-
+// Set by the processor, observed by the view
 struct AudioPlayerState : public juce::ChangeBroadcaster
 {
     bool isPlaying = false;
@@ -36,7 +36,5 @@ struct AudioPlayerState : public juce::ChangeBroadcaster
     {
         hasLoadedFile = loaded;
         sendChangeMessage();
-    }
-    
-    AudioMetaData metadata;
+    }    
 };

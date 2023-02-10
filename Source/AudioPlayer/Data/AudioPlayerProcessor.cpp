@@ -31,9 +31,9 @@ void AudioPlayerProcessor::loadTrack (const juce::File& musicFile)
         if (reader->metadataValues.size() > 0)
             loadMetadata (*reader);
         else
-            state.metadata.trackName = musicFile.getFileNameWithoutExtension();
+            metadata.trackName = musicFile.getFileNameWithoutExtension();
         
-        state.metadata.trackLength = juce::String { reader->lengthInSamples / reader->sampleRate };
+        metadata.trackLength = juce::String { reader->lengthInSamples / reader->sampleRate };
         
         bool wasLoadSuccessful = reader->read (&audioSourceBuffer, 0, numSamples, 0, true, true);
         state.setLoaded (wasLoadSuccessful);
@@ -42,12 +42,12 @@ void AudioPlayerProcessor::loadTrack (const juce::File& musicFile)
 
 void AudioPlayerProcessor::loadMetadata (juce::AudioFormatReader& reader)
 {
-    auto metadata = reader.metadataValues;
-    auto metadataKeys = metadata.getAllKeys();
+    auto metadataValues = reader.metadataValues;
+    auto metadataKeys = metadataValues.getAllKeys();
     
-    for (int i = 0; i < metadata.size(); i++)
+    for (int i = 0; i < metadataValues.size(); i++)
     {
-        auto value = metadata.getValue (metadataKeys[i], "");
+        auto value = metadataValues.getValue (metadataKeys[i], "");
         std::cout << "Key: " << metadataKeys[i] << " Value: " << value << std::endl;
     }
 }
