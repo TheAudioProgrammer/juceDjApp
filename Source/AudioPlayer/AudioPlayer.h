@@ -12,30 +12,32 @@
 
 #include "Data/AudioPlayerProcessor.h"
 #include "View/AudioPlayerView.h"
+#include "View/AudioWaveformView.h"
+
 
 /* Encapsulates audio processing, UI (view), and state into one object that can be easily controlled -- mutual area to pass data around between processor & view */
 struct AudioPlayer : public juce::Timer
 {
     AudioPlayer()
     {
-        view.onPlay = [this]()
+        playerView.onPlay = [this]()
         {
             processor.play();
         };
         
-        view.onStop = [this]()
+        playerView.onStop = [this]()
         {
             processor.stop();
         };
         
-        view.onLoad = [this]()
+        playerView.onLoad = [this]()
         {
             loadFile();
         };
         
-        view.onGainChange = [this]()
+        playerView.onGainChange = [this]()
         {
-            processor.setDecibelValue (view.getGainSliderValue());
+            processor.setDecibelValue (playerView.getGainSliderValue());
         };
         
         startTimerHz (30.0f);
@@ -49,15 +51,15 @@ struct AudioPlayer : public juce::Timer
     void timerCallback()
     {
         processor.convertSamplesToTime();
-        view.percentageInTrackPlayed = processor.getPercentagePlayedInTrack();
-        view.repaint();
+        playerView.percentageInTrackPlayed = processor.getPercentagePlayedInTrack();
+        playerView.repaint();
+        waveformView.repaint();
     }
-    
-    AudioPlayerProcessor processor;
-    AudioPlayerView view { processor.getState(), processor.getMetadata() };
     
     void loadFile()
     {
+        processor.getState().setLoaded (false);
+        
         songSelector = std::make_unique<juce::FileChooser>("Select a track to play", juce::File::getSpecialLocation (juce::File::SpecialLocationType::userDesktopDirectory), processor.getAudioFormatManager().getWildcardForAllFormats());
         
         auto songSelectorFlags = juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles;
@@ -68,6 +70,10 @@ struct AudioPlayer : public juce::Timer
         });
     }
     
+    AudioPlayerProcessor processor;
+    AudioPlayerView playerView { processor.getState(), processor.getMetadata() };
+    AudioWaveformView waveformView { processor.getState(), processor.getTrackBuffer(), processor.getAudioFormatManager() };
+
 private:
     /* Window to select a track */
     std::unique_ptr<juce::FileChooser> songSelector;

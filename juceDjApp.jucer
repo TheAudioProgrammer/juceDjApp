@@ -8,40 +8,44 @@
       <FILE id="ZYqRAS" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
       <FILE id="U0jt24" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>
-    </GROUP>
-    <GROUP id="{7490D2AA-233C-DCA0-97EE-56CC3AA5AE72}" name="AudioPlayer">
-      <FILE id="hKmudH" name="AudioPlayer.h" compile="0" resource="0" file="Source/AudioPlayer/AudioPlayer.h"/>
-      <GROUP id="{8C73DC0F-B249-69D7-B4A3-1933DDA325B0}" name="State">
-        <FILE id="hTPDcM" name="AudioPlayerState.h" compile="0" resource="0"
-              file="Source/AudioPlayer/State/AudioPlayerState.h"/>
+      <GROUP id="{7490D2AA-233C-DCA0-97EE-56CC3AA5AE72}" name="AudioPlayer">
+        <FILE id="hKmudH" name="AudioPlayer.h" compile="0" resource="0" file="Source/AudioPlayer/AudioPlayer.h"/>
+        <GROUP id="{8C73DC0F-B249-69D7-B4A3-1933DDA325B0}" name="State">
+          <FILE id="hTPDcM" name="AudioPlayerState.h" compile="0" resource="0"
+                file="Source/AudioPlayer/State/AudioPlayerState.h"/>
+        </GROUP>
+        <GROUP id="{26D24715-2B6F-AC1F-7079-A63EBFD1BECD}" name="Data">
+          <FILE id="ISfNRI" name="AudioPlayerProcessor.cpp" compile="1" resource="0"
+                file="Source/AudioPlayer/Data/AudioPlayerProcessor.cpp"/>
+          <FILE id="cGoGV7" name="AudioPlayerProcessor.h" compile="0" resource="0"
+                file="Source/AudioPlayer/Data/AudioPlayerProcessor.h"/>
+        </GROUP>
+        <GROUP id="{D49EFD6B-243B-F05B-DE46-2FE6DD1E65DD}" name="View">
+          <FILE id="vt78d1" name="AudioPlayerView.cpp" compile="1" resource="0"
+                file="Source/AudioPlayer/View/AudioPlayerView.cpp"/>
+          <FILE id="GwzFOy" name="AudioPlayerView.h" compile="0" resource="0"
+                file="Source/AudioPlayer/View/AudioPlayerView.h"/>
+          <FILE id="I08Wrt" name="AudioWaveformView.cpp" compile="1" resource="0"
+                file="Source/AudioPlayer/View/AudioWaveformView.cpp"/>
+          <FILE id="LNa6dm" name="AudioWaveformView.h" compile="0" resource="0"
+                file="Source/AudioPlayer/View/AudioWaveformView.h"/>
+        </GROUP>
       </GROUP>
-      <GROUP id="{26D24715-2B6F-AC1F-7079-A63EBFD1BECD}" name="Data">
-        <FILE id="ISfNRI" name="AudioPlayerProcessor.cpp" compile="1" resource="0"
-              file="Source/AudioPlayer/Data/AudioPlayerProcessor.cpp"/>
-        <FILE id="cGoGV7" name="AudioPlayerProcessor.h" compile="0" resource="0"
-              file="Source/AudioPlayer/Data/AudioPlayerProcessor.h"/>
+      <GROUP id="{8C188C48-C70D-D188-4A41-B45DF2750970}" name="MixerDevice">
+        <GROUP id="{9C35225C-9447-B899-CE72-8C94D05EC141}" name="Data">
+          <FILE id="JrfvDk" name="MixerDevice.h" compile="0" resource="0" file="Source/MixerDevice/Data/MixerDevice.h"/>
+          <FILE id="kMqUe6" name="MixerDeviceList.h" compile="0" resource="0"
+                file="Source/MixerDevice/Data/MixerDeviceList.h"/>
+          <FILE id="wYlsFb" name="MixerDeviceScanner.h" compile="0" resource="0"
+                file="Source/MixerDevice/Data/MixerDeviceScanner.h"/>
+        </GROUP>
       </GROUP>
-      <GROUP id="{D49EFD6B-243B-F05B-DE46-2FE6DD1E65DD}" name="View">
-        <FILE id="chOHyC" name="AudioPlayerView.cpp" compile="1" resource="0"
-              file="Source/AudioPlayer/View/AudioPlayerView.cpp"/>
-        <FILE id="mdNPJQ" name="AudioPlayerView.h" compile="0" resource="0"
-              file="Source/AudioPlayer/View/AudioPlayerView.h"/>
-      </GROUP>
-    </GROUP>
-    <GROUP id="{8C188C48-C70D-D188-4A41-B45DF2750970}" name="MixerDevice">
-      <GROUP id="{9C35225C-9447-B899-CE72-8C94D05EC141}" name="Data">
-        <FILE id="JrfvDk" name="MixerDevice.h" compile="0" resource="0" file="Source/MixerDevice/Data/MixerDevice.h"/>
-        <FILE id="kMqUe6" name="MixerDeviceList.h" compile="0" resource="0"
-              file="Source/MixerDevice/Data/MixerDeviceList.h"/>
-        <FILE id="wYlsFb" name="MixerDeviceScanner.h" compile="0" resource="0"
-              file="Source/MixerDevice/Data/MixerDeviceScanner.h"/>
-      </GROUP>
-    </GROUP>
-    <GROUP id="{7CCF436D-D388-D038-239C-B5E0B613457A}" name="Settings">
-      <GROUP id="{FFEDCF0D-C747-3341-D250-617E30DCE777}" name="View">
-        <FILE id="IpuuSp" name="SettingsView.cpp" compile="1" resource="0"
-              file="Source/Settings/View/SettingsView.cpp"/>
-        <FILE id="iTSADu" name="SettingsView.h" compile="0" resource="0" file="Source/Settings/View/SettingsView.h"/>
+      <GROUP id="{7CCF436D-D388-D038-239C-B5E0B613457A}" name="Settings">
+        <GROUP id="{FFEDCF0D-C747-3341-D250-617E30DCE777}" name="View">
+          <FILE id="IpuuSp" name="SettingsView.cpp" compile="1" resource="0"
+                file="Source/Settings/View/SettingsView.cpp"/>
+          <FILE id="iTSADu" name="SettingsView.h" compile="0" resource="0" file="Source/Settings/View/SettingsView.h"/>
+        </GROUP>
       </GROUP>
     </GROUP>
   </MAINGROUP>

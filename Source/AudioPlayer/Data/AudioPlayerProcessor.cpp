@@ -17,6 +17,8 @@ AudioPlayerProcessor::AudioPlayerProcessor()
 
 void AudioPlayerProcessor::loadTrack (const juce::File& musicFile)
 {
+    readPosition = 0;
+    
     auto* r = audioFormatManager.createReaderFor (musicFile);
     std::unique_ptr<juce::AudioFormatReader> reader (r);
     

@@ -3,7 +3,7 @@
 //==============================================================================
 MainComponent::MainComponent() : deviceScanner (deviceManager), settingsView (deviceManager)
 {
-    setSize (700, 400);
+    setSize (1400, 600);
 
     if (juce::RuntimePermissions::isRequired (juce::RuntimePermissions::recordAudio)
         && ! juce::RuntimePermissions::isGranted (juce::RuntimePermissions::recordAudio))
@@ -20,7 +20,8 @@ MainComponent::MainComponent() : deviceScanner (deviceManager), settingsView (de
     deviceManager.addChangeListener (&deviceScanner);
     
     addAndMakeVisible (settingsView);
-    addAndMakeVisible (audioPlayer1.view);    
+    addAndMakeVisible (audioPlayer1.playerView);
+    addAndMakeVisible (audioPlayer1.waveformView);
 }
 
 MainComponent::~MainComponent()
@@ -34,6 +35,7 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 {
     // Assuming this is a stereo setup for each track
     audioPlayer1.processor.prepareToPlay (2 , samplesPerBlockExpected, sampleRate);
+    audioPlayer1.waveformView.prepare (sampleRate);
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
@@ -58,7 +60,8 @@ void MainComponent::resized()
     auto pad = 10;
     
     settingsView.setBounds (10, 10, 100, 50);
-    audioPlayer1.view.setBounds (10, settingsView.getBottom() + pad, 600, 300);
+    audioPlayer1.playerView.setBounds (10, settingsView.getBottom() + pad, 600, 300);
+    audioPlayer1.waveformView.setBounds (10, audioPlayer1.playerView.getBottom() + pad, 1200, 100);
 }
 
 

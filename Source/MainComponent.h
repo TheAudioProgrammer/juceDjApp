@@ -13,8 +13,6 @@
 
 
 
-
-
 //==============================================================================
 /*
     This component lives inside our window, and this is where you should put all
@@ -46,7 +44,7 @@ private:
     SettingsView settingsView;
     
     AudioPlayer audioPlayer1;
-    
+        
     bool fileIsLoaded { false };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)

@@ -15,6 +15,7 @@
 
 
 
+
 //================================================================================
 
 class AudioPlayerProcessor 
@@ -32,6 +33,7 @@ public:
     AudioPlayerState& getState() { return state; }
     AudioMetadata& getMetadata() { return metadata; }
     juce::AudioFormatManager& getAudioFormatManager() { return audioFormatManager; }
+    juce::AudioBuffer<float>& getTrackBuffer() { return audioSourceBuffer; }
     
 private:
     void loadMetadata (juce::AudioFormatReader& reader);
