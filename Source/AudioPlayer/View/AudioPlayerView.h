@@ -11,6 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "../../LookAndFeel/StyleSheet.h"
 #include "../State/AudioPlayerState.h"
 
 

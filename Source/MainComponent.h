@@ -2,6 +2,9 @@
 
 #include <JuceHeader.h>
 
+// Assets
+#include "LookAndFeel/StyleSheet.h"
+
 // Data
 #include "MixerDevice/Data/MixerDeviceScanner.h"
 
@@ -46,6 +49,8 @@ private:
     AudioPlayer audioPlayer1;
         
     bool fileIsLoaded { false };
+    
+    juce::LookAndFeel_V4 customLookAndFeel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

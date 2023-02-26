@@ -16,6 +16,8 @@ MainComponent::MainComponent() : deviceScanner (deviceManager), settingsView (de
         setAudioChannels (2, 2);
     }
     
+    setLookAndFeel (&customLookAndFeel);
+    
     // Device manager broadcasts when a new device is connected
     deviceManager.addChangeListener (&deviceScanner);
     
@@ -26,6 +28,7 @@ MainComponent::MainComponent() : deviceScanner (deviceManager), settingsView (de
 
 MainComponent::~MainComponent()
 {
+    setLookAndFeel (nullptr);
     deviceManager.removeAllChangeListeners();
     shutdownAudio();
 }
@@ -61,7 +64,7 @@ void MainComponent::resized()
     
     settingsView.setBounds (10, 10, 100, 50);
     audioPlayer1.playerView.setBounds (10, settingsView.getBottom() + pad, 600, 300);
-    audioPlayer1.waveformView.setBounds (10, audioPlayer1.playerView.getBottom() + pad, 1200, 100);
+    audioPlayer1.waveformView.setBounds (10, audioPlayer1.playerView.getBottom() + pad, 600, 100);
 }
 
 

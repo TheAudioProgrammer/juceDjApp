@@ -48,22 +48,26 @@ AudioPlayerView::AudioPlayerView (AudioPlayerState& s, AudioMetadata& m)
     
     addAndMakeVisible (gainSlider);
     
-    juce::Font f { 24.0f, juce::Font::FontStyleFlags::plain };
+    juce::Font f { StyleSheet::boldFont };
     
-    trackNameLabel.setFont (f);
-    trackNameLabel.setText ("No track Loaded", juce::NotificationType::dontSendNotification);
+    trackNameLabel.setFont (f.withHeight (24.0f));
+    trackNameLabel.setText ("No Track Loaded", juce::NotificationType::dontSendNotification);
     trackNameLabel.setColour (juce::Label::ColourIds::outlineColourId, juce::Colours::white);
     addAndMakeVisible (trackNameLabel);
     
-    artistNameLabel.setFont (f);
+    artistNameLabel.setFont (f.withHeight (24.0f));
     artistNameLabel.setText ("No Artist", juce::NotificationType::dontSendNotification);
     artistNameLabel.setColour (juce::Label::ColourIds::outlineColourId, juce::Colours::white);
     addAndMakeVisible (artistNameLabel);
     
-    trackLengthLabel.setFont (f);
+    trackLengthLabel.setFont (f.withHeight (24.0f));
     trackLengthLabel.setText ("00:00.0", juce::NotificationType::dontSendNotification);
     //trackLengthLabel.setColour (juce::Label::ColourIds::outlineColourId, juce::Colours::white);
     addAndMakeVisible (trackLengthLabel);
+    
+    loadAudioButton.getLookAndFeel().setDefaultSansSerifTypeface (StyleSheet::boldFont);
+    playAudioButton.getLookAndFeel().setDefaultSansSerifTypeface (StyleSheet::boldFont);
+    stopAudioButton.getLookAndFeel().setDefaultSansSerifTypeface (StyleSheet::boldFont);
     
     state.addChangeListener (this);
 }

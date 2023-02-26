@@ -3,7 +3,20 @@
 <JUCERPROJECT id="UJGaHV" name="juceDjApp" projectType="guiapp" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="Q7sACb" name="juceDjApp">
+    <GROUP id="{8D194FEF-0591-1A72-0883-D280482F17D4}" name="Resources">
+      <GROUP id="{26BC40C9-2442-23C6-3689-2689AB03672C}" name="Assets">
+        <FILE id="mCwDBP" name="WorkSans-Regular.ttf" compile="0" resource="1"
+              file="Resources/Assets/WorkSans-Regular.ttf"/>
+        <FILE id="VgUp6a" name="WorkSans-SemiBold.ttf" compile="0" resource="1"
+              file="Resources/Assets/WorkSans-SemiBold.ttf"/>
+      </GROUP>
+      <FILE id="vcjyNe" name="Resources.cpp" compile="1" resource="0" file="Resources/Resources.cpp"/>
+      <FILE id="IonIJR" name="Resources.h" compile="0" resource="0" file="Resources/Resources.h"/>
+    </GROUP>
     <GROUP id="{34620277-9968-F4C2-11EE-DC2CA8F7DB20}" name="Source">
+      <GROUP id="{715CBC52-08A9-0EBB-3B38-C479C7DA5851}" name="LookAndFeel">
+        <FILE id="tZC4pt" name="StyleSheet.h" compile="0" resource="0" file="Source/LookAndFeel/StyleSheet.h"/>
+      </GROUP>
       <FILE id="f83ehr" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="ZYqRAS" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
       <FILE id="U0jt24" name="MainComponent.cpp" compile="1" resource="0"
