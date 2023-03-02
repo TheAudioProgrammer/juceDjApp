@@ -10,8 +10,7 @@
 
 #pragma once
 
-#include <JuceHeader.h>
-#include "../../Resources/Resources.h"
+#include "../Resources/Resources.h"
 
 namespace StyleSheet
 {

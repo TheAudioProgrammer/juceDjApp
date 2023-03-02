@@ -1,7 +1,5 @@
 #pragma once
 
-#include <JuceHeader.h>
-
 // Assets
 #include "LookAndFeel/StyleSheet.h"
 

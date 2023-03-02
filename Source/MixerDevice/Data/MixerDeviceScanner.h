@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include <JuceHeader.h>
 #include "MixerDeviceList.h"
 
 /* When a user plugs in a USB device, scans through our device list to see if it's listed.  If yes, then updates the settings */

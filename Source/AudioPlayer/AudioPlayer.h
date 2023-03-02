@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include <JuceHeader.h>
 #include "Data/AudioPlayerProcessor.h"
 #include "View/AudioPlayerView.h"
 #include "View/AudioWaveformView.h"

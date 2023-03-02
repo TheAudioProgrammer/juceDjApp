@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include <JuceHeader.h>
 
 /* Holds loaded track data */
 struct AudioMetadata 
