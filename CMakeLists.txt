@@ -17,12 +17,13 @@ set(CMAKE_CXX_STANDARD 17)
 # By default we don't want Xcode schemes to be made for modules, etc
 set(CMAKE_XCODE_GENERATE_SCHEME OFF)
 
-
-
 # Go get JUCE using CMake's "FetchContent"
 set(FETCHCONTENT_QUIET OFF)
 
 include (FetchContent)
+
+option(JUCE_ENABLE_MODULE_SOURCE_GROUPS "Enable Module Source Groups" ON)
+set_property(GLOBAL PROPERTY USE_FOLDERS YES)
 
 FetchContent_Declare (
     JUCE
@@ -32,10 +33,6 @@ FetchContent_Declare (
     FIND_PACKAGE_ARGS 7.0.3 GLOBAL)
 
 FetchContent_MakeAvailable (JUCE)
-
-option(JUCE_ENABLE_MODULE_SOURCE_GROUPS "Enable Module Source Groups" ON)
-set_property(GLOBAL PROPERTY USE_FOLDERS YES)
-
 
 juce_add_gui_app(juceDjApp)
 

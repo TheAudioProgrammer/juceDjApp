@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include <ju
 
 /* Holds loaded track data */
 struct AudioMetadata 
