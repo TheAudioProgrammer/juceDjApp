@@ -6,7 +6,24 @@
   ==============================================================================
 */
 
+
+#include <juce_core/juce_core.h>
 #include "MainComponent.h"
+
+struct ProjectInfo
+{
+    static const char* const  projectName;
+    static const char* const  companyName;
+    static const char* const  versionString;
+    static const int          versionNumber;
+};
+
+inline const char* const ProjectInfo::projectName = "juceDjApp";
+inline const char* const ProjectInfo::companyName = "The Audio Programmer";
+inline const char* const ProjectInfo::versionString = "0.0.1";
+inline const int ProjectInfo::versionNumber = 0;
+
+
 
 //==============================================================================
 class audioDeviceManagerApplication  : public juce::JUCEApplication
@@ -23,6 +40,7 @@ public:
     void initialise (const juce::String& commandLine) override
     {
         // This method is where you should put your application's initialisation code..
+        juce::ignoreUnused (commandLine);
 
         mainWindow.reset (new MainWindow (getApplicationName()));
     }
@@ -44,6 +62,8 @@ public:
 
     void anotherInstanceStarted (const juce::String& commandLine) override
     {
+        juce::ignoreUnused (commandLine);
+        
         // When another instance of the app is launched while this one is running,
         // this method is invoked, and the commandLine parameter tells you what
         // the other instance's command-line arguments were.

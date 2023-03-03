@@ -98,8 +98,8 @@ void AudioPlayerView::drawDisc (juce::Graphics& g)
       
     g.drawLine (discCenter.getX(),
                 discCenter.getY(),
-                discCenter.getX() + radius * std::sin (2.0 * juce::MathConstants<float>::pi * percentageInTrackPlayed),
-                discCenter.getY() - radius * std::cos (2.0f * juce::MathConstants<float>::pi * percentageInTrackPlayed),
+                discCenter.getX() + radius * (float)std::sin (2.0 * juce::MathConstants<float>::pi * percentageInTrackPlayed),
+                discCenter.getY() - radius * (float)std::cos (2.0f * juce::MathConstants<float>::pi * percentageInTrackPlayed),
                 10.0f);
     
     // Completion disc

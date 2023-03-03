@@ -26,7 +26,7 @@ void AudioPlayerProcessor::loadTrack (const juce::File& musicFile)
     {
         auto numSamples = static_cast<int>(reader->lengthInSamples);
         
-        audioSourceBuffer.setSize (reader->numChannels, numSamples);
+        audioSourceBuffer.setSize ((int)reader->numChannels, numSamples);
         jassert (numSamples > 0 && reader->numChannels > 0);
         
         // If we have metadata, load it!  Otherwise fall back to file name as track

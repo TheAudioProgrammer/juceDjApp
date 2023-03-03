@@ -10,6 +10,8 @@
 
 #pragma once
 
+#include <juce_gui_basics/juce_gui_basics.h>
+
 #include "../Resources/Resources.h"
 
 namespace StyleSheet
@@ -18,9 +20,10 @@ namespace StyleSheet
 static juce::Typeface::Ptr boldFont  { juce::Typeface::createSystemTypefaceFor (Resources::WorkSansSemiBold_ttf, Resources::WorkSansSemiBold_ttfSize) };
 static juce::Typeface::Ptr plainFont { juce::Typeface::createSystemTypefaceFor (Resources::WorkSansRegular_ttf, Resources::WorkSansRegular_ttfSize) };
 
-};
+}
 
 class customLookandFeel : public juce::LookAndFeel_V4
 {
     
 };
+

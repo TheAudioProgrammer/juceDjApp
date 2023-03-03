@@ -45,6 +45,7 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
 {
     bufferToFill.clearActiveBufferRegion();
     audioPlayer1.processor.getNextAudioBlock (bufferToFill);
+    
 }
 
 void MainComponent::releaseResources()

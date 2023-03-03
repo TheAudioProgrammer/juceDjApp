@@ -20,22 +20,25 @@ public:
     
     void changeListenerCallback (juce::ChangeBroadcaster *source) override
     {
-        const auto& deviceTypes = deviceManager.getAvailableDeviceTypes();
-        
-        for (auto& type : deviceTypes)
+        if (source == dynamic_cast<juce::ChangeBroadcaster*>(&deviceManager))
         {
-            // According to docs, this must be called at least once before calling getDeviceNames()
-            type->scanForDevices();
+            const auto& deviceTypes = deviceManager.getAvailableDeviceTypes();
             
-            for (const auto& deviceName : type->getDeviceNames())
+            for (auto& type : deviceTypes)
             {
-                for (auto mixer : mixerDeviceList.deviceSetups)
+                // According to docs, this must be called at least once before calling getDeviceNames()
+                type->scanForDevices();
                 
-                    if (deviceName == mixer.getAudioDeviceName())
-                    {
-                        deviceManager.initialise (mixer.getNumInputChannels(), mixer.getNumOutputChannels(), nullptr, true);
-                        deviceManager.setAudioDeviceSetup (mixer.createAudioDeviceSetup(), true);
-                    }
+                for (const auto& deviceName : type->getDeviceNames())
+                {
+                    for (auto mixer : mixerDeviceList.deviceSetups)
+                        
+                        if (deviceName == mixer.getAudioDeviceName())
+                        {
+                            deviceManager.initialise (mixer.getNumInputChannels(), mixer.getNumOutputChannels(), nullptr, true);
+                            deviceManager.setAudioDeviceSetup (mixer.createAudioDeviceSetup(), true);
+                        }
+                }
             }
         }
     }

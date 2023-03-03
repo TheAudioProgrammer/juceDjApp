@@ -10,7 +10,8 @@
 
 #pragma once
 
-#include <JuceHeader.h>
+#include <juce_core/juce_core.h>
+#include <juce_audio_devices/juce_audio_devices.h>
 
 
 /* This is where we describe data for each mixer that we may connect to the app and bundle this data to pass to our device manager and change settings, such as:

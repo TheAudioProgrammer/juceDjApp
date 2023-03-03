@@ -10,6 +10,11 @@
 
 #pragma once
 
+#include <juce_audio_devices/juce_audio_devices.h>
+#include <juce_gui_basics/juce_gui_basics.h>
+#include <juce_audio_utils/juce_audio_utils.h>
+
+
 
 class SettingsView : public juce::Component
 {

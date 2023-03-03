@@ -10,7 +10,9 @@
 
 #pragma once
 
-#include <JuceHeader.h>
+#include <juce_events/juce_events.h>
+#include <juce_gui_basics/juce_gui_basics.h>
+
 #include "Data/AudioPlayerProcessor.h"
 #include "View/AudioPlayerView.h"
 #include "View/AudioWaveformView.h"
@@ -38,7 +40,7 @@ struct AudioPlayer : public juce::Timer
         
         playerView.onGainChange = [this]()
         {
-            processor.setDecibelValue (playerView.getGainSliderValue());
+            processor.setDecibelValue (static_cast<float>(playerView.getGainSliderValue()));
         };
         
         startTimerHz (30.0f);
