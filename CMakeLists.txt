@@ -32,7 +32,14 @@ FetchContent_Declare (
     GIT_SHALLOW ON
     FIND_PACKAGE_ARGS 7.0.3 GLOBAL)
 
+FetchContent_Declare (
+    taglib
+    GIT_REPOSITORY https://github.com/taglib/taglib.git
+    GIT_TAG origin/master
+    GIT_SHALLOW ON)
+
 FetchContent_MakeAvailable (JUCE)
+FetchContent_MakeAvailable (taglib)
 
 juce_add_gui_app(juceDjApp)
 
@@ -67,4 +74,6 @@ target_link_libraries(juceDjApp PRIVATE
     juce::juce_dsp
     juce::juce_recommended_config_flags
     juce::juce_recommended_lto_flags
-    juce::juce_recommended_warning_flags)
+    juce::juce_recommended_warning_flags
+    taglib)
+
