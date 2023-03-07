@@ -139,6 +139,7 @@ void AudioPlayerView::changeListenerCallback (juce::ChangeBroadcaster* source)
 void AudioPlayerView::update()
 {
     trackNameLabel.setText (metadata.trackName, juce::dontSendNotification);
+    artistNameLabel.setText (metadata.artistName, juce::dontSendNotification);
     trackLengthLabel.setText (metadata.trackCurrentTime, juce::dontSendNotification);
     repaint();
 }

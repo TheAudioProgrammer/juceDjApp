@@ -24,6 +24,7 @@ MainComponent::MainComponent() : deviceScanner (deviceManager), settingsView (de
     addAndMakeVisible (settingsView);
     addAndMakeVisible (audioPlayer1.playerView);
     addAndMakeVisible (audioPlayer1.waveformView);
+    addAndMakeVisible (trackView);
 }
 
 MainComponent::~MainComponent()
@@ -65,7 +66,8 @@ void MainComponent::resized()
     
     settingsView.setBounds (10, 10, 100, 50);
     audioPlayer1.playerView.setBounds (10, settingsView.getBottom() + pad, 600, 300);
-    audioPlayer1.waveformView.setBounds (10, audioPlayer1.playerView.getBottom() + pad, 600, 100);
+    audioPlayer1.waveformView.setBounds (audioPlayer1.playerView.getRight() + pad, settingsView.getBottom() + pad, 600, 100);
+    trackView.setBounds (10,audioPlayer1.playerView.getBottom() + pad, 600, 200);
 }
 
 

@@ -13,6 +13,8 @@
 #include <juce_audio_basics/juce_audio_basics.h>
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_audio_formats/juce_audio_formats.h>
+#include <fileref.h>
+#include <tag.h>
 
 
 #include "../State/AudioPlayerState.h"
@@ -40,7 +42,7 @@ public:
     juce::AudioBuffer<float>& getTrackBuffer() { return audioSourceBuffer; }
     
 private:
-    void loadMetadata (juce::AudioFormatReader& reader);
+    void loadMetadata (const juce::File& musicFile);
     
     /* Helper to ensure time is always "00" rather than "0" until it gets to "10" */
     juce::String convertTimeToString (double time);

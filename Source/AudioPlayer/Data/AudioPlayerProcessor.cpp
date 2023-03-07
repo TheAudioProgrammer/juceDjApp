@@ -29,11 +29,7 @@ void AudioPlayerProcessor::loadTrack (const juce::File& musicFile)
         audioSourceBuffer.setSize ((int)reader->numChannels, numSamples);
         jassert (numSamples > 0 && reader->numChannels > 0);
         
-        // If we have metadata, load it!  Otherwise fall back to file name as track
-        if (reader->metadataValues.size() > 0)
-            loadMetadata (*reader);
-        else
-            metadata.trackName = musicFile.getFileNameWithoutExtension();
+        loadMetadata (musicFile);
         
         //metadata.trackLength = juce::String { reader->lengthInSamples / reader->sampleRate };
         trackNumSamples = reader->lengthInSamples;
@@ -64,15 +60,45 @@ float AudioPlayerProcessor::getPercentagePlayedInTrack()
     return readPosition > 0.0f ? juce::jmap<float>(float(readPosition), 1.0f, float(trackNumSamples), 0.0f, 100.0f) : 0.0f;
 }
 
-void AudioPlayerProcessor::loadMetadata (juce::AudioFormatReader& reader)
+void AudioPlayerProcessor::loadMetadata (const juce::File& musicFile)
 {
-    auto metadataValues = reader.metadataValues;
-    auto metadataKeys = metadataValues.getAllKeys();
+    TagLib::FileRef tagReader (musicFile.getFullPathName().toUTF8());
     
-    for (int i = 0; i < metadataValues.size(); i++)
+    if (! tagReader.isNull() && tagReader.tag())
     {
-        auto value = metadataValues.getValue (metadataKeys[i], "");
-        std::cout << "Key: " << metadataKeys[i] << " Value: " << value << std::endl;
+        TagLib::Tag *tag = tagReader.tag();
+
+        std::cout << "-- TAG (basic) --" << std::endl;
+        std::cout << "title   - \"" << tag->title()   << "\"" << std::endl;
+        std::cout << "artist  - \"" << tag->artist()  << "\"" << std::endl;
+        std::cout << "album   - \"" << tag->album()   << "\"" << std::endl;
+        std::cout << "year    - \"" << tag->year()    << "\"" << std::endl;
+        std::cout << "comment - \"" << tag->comment() << "\"" << std::endl;
+        std::cout << "track   - \"" << tag->track()   << "\"" << std::endl;
+        std::cout << "genre   - \"" << tag->genre()   << "\"" << std::endl;
+        
+        metadata.trackName = juce::String (tag->title().toCString());
+        metadata.artistName = juce::String (tag->artist().toCString());
+    
+        if(! tagReader.isNull() && tagReader.audioProperties())
+        {
+            
+            TagLib::AudioProperties *properties = tagReader.audioProperties();
+            
+            int seconds = properties->length() % 60;
+            int minutes = (properties->length() - seconds) / 60;
+            
+            std::cout << "-- AUDIO --" << std::endl;
+            std::cout << "bitrate     - " << properties->bitrate() << std::endl;
+            std::cout << "sample rate - " << properties->sampleRate() << std::endl;
+            std::cout << "channels    - " << properties->channels() << std::endl;
+            std::cout << "length      - " << minutes << ":" << std::setfill('0') << std::setw(2) << seconds << std::endl;
+        }
+    }
+    else
+    {
+        metadata.trackName = musicFile.getFileNameWithoutExtension();
+        metadata.artistName = "Unknown";
     }
 }
 

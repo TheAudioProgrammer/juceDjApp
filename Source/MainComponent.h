@@ -14,6 +14,8 @@
 // Encapsulated objects (UI, Data & State)
 #include "AudioPlayer/AudioPlayer.h"
 
+#include "TrackList/View/TrackListView.h"
+
 
 
 //==============================================================================
@@ -47,6 +49,8 @@ private:
     SettingsView settingsView;
     
     AudioPlayer audioPlayer1;
+    
+    TrackListView trackView;
         
     bool fileIsLoaded { false };
     
