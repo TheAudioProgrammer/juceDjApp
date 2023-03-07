@@ -4,13 +4,9 @@
 
 TrackListView::TrackListView()
 {
-    tableHeader = std::make_unique<juce::TableHeaderComponent>();
-    tableHeader->addColumn ("Track", 1, 80);
-    tableHeader->addColumn ("Artist", 2, 80);
-    tableHeader->addColumn ("Length", 3, 80);
-    
-    
-    listBox.setHeader (std::move (tableHeader));
+    listBox.getHeader().addColumn ("Track", 1, 80);
+    listBox.getHeader().addColumn ("Artist", 2, 80);
+    listBox.getHeader().addColumn ("Length", 3, 80);
     addAndMakeVisible (listBox);
 }
 

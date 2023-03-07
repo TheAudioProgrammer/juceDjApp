@@ -14,7 +14,6 @@ public:
     
     
 private:
-    std::unique_ptr<juce::TableHeaderComponent> tableHeader;
     juce::TableListBox listBox;
     
 };
