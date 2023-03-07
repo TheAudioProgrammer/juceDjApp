@@ -41,6 +41,11 @@ FetchContent_Declare (
 FetchContent_MakeAvailable (JUCE)
 FetchContent_MakeAvailable (taglib)
 
+if(taglib_POPULATED)
+    get_property(dirs DIRECTORY "${taglib_SOURCE_DIR}/taglib" PROPERTY INCLUDE_DIRECTORIES)
+    target_include_directories(tag PUBLIC ${dirs} "${taglib_SOURCE_DIR}/taglib")
+endif()
+
 juce_add_gui_app(juceDjApp)
 
 
@@ -75,5 +80,5 @@ target_link_libraries(juceDjApp PRIVATE
     juce::juce_recommended_config_flags
     juce::juce_recommended_lto_flags
     juce::juce_recommended_warning_flags
-    taglib)
+    tag)
 

@@ -80,5 +80,4 @@ struct AudioPlayer : public juce::Timer
 private:
     /* Window to select a track */
     std::unique_ptr<juce::FileChooser> songSelector;
-    
 };
