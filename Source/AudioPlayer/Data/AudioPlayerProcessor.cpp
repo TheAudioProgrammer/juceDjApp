@@ -66,7 +66,8 @@ void AudioPlayerProcessor::loadMetadata (const juce::File& musicFile)
     
     if (! tagReader.isNull() && tagReader.tag())
     {
-        TagLib::Tag *tag = tagReader.tag();
+        TagLib::Tag* rawTag = tagReader.tag();
+        auto tag = std::unique_ptr<TagLib::Tag>(rawTag);
 
         std::cout << "-- TAG (basic) --" << std::endl;
         std::cout << "title   - \"" << tag->title()   << "\"" << std::endl;

@@ -21,6 +21,8 @@ MainComponent::MainComponent() : deviceScanner (deviceManager), settingsView (de
     // Device manager broadcasts when a new device is connected
     deviceManager.addChangeListener (&deviceScanner);
     
+    deviceManager.addChangeListener (&trackView);
+    
     addAndMakeVisible (settingsView);
     addAndMakeVisible (audioPlayer1.playerView);
     addAndMakeVisible (audioPlayer1.waveformView);
