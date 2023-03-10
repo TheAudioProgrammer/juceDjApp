@@ -2,6 +2,8 @@
 #pragma once
 
 #include <juce_gui_basics/juce_gui_basics.h>
+#include "../../Metadata/Metadata.h"
+#include "../../Metadata/TagReader.h"
 
 
 class XmlEditor
@@ -23,33 +25,16 @@ public:
             
             for (int i = 0; i < fileList.size(); i++)
             {
-                juce::XmlElement* metadata = new juce::XmlElement ("AudioFile");
-                metadata->setAttribute ("Track", "Some Song");
-                metadata->setAttribute ("Artist", "My Favorite DJ");
-                metadata->setAttribute ("Path", fileList[i].getFullPathName());
-                library.addChildElement (metadata);
+                juce::XmlElement* fileData = new juce::XmlElement ("AudioFile");
+                
+                auto metadata = TagReader::getMetadataFromFile (fileList[i]);
+                
+                fileData->setAttribute ("Title", metadata.title);
+                fileData->setAttribute ("Artist", metadata.artist);
+                fileData->setAttribute ("Path", metadata.path);
+                
+                library.addChildElement (fileData);
             }
-            
-            library.writeTo (newXml);
-                        
-//            directorySelector = std::make_unique<juce::FileChooser>("Select a directory for tracks", juce::File::getSpecialLocation (juce::File::SpecialLocationType::userDesktopDirectory));
-//
-//            auto songSelectorFlags = juce::FileBrowserComponent::canSelectDirectories;
-//
-//            directorySelector->launchAsync (songSelectorFlags, [&] (const juce::FileChooser& chooser)
-//            {
-//                auto fileList = chooser.getResult().findChildFiles (juce::File::TypesOfFileToFind::findFiles, true, "*.mp3;*.wav");
-//
-//                for (int i = 0; i < fileList.size(); i++)
-//                {
-//                    auto metadata = std::make_unique<juce::XmlElement>("AudioFile");
-//                    metadata->setAttribute ("Track", "Some Song");
-//                    metadata->setAttribute ("Artist", "My Favorite DJ");
-//                    metadata->setAttribute ("Path", fileList[i].getFullPathName());
-//                    metadata->setAttribute ("Type", fileList[i].getFileExtension());
-//                    library.addChildElement (metadata.get());
-//                }
-//            });
             
             library.writeTo (newXml);
         }

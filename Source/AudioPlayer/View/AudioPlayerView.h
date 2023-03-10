@@ -12,6 +12,7 @@
 
 #include "../../LookAndFeel/StyleSheet.h"
 #include "../State/AudioPlayerState.h"
+#include "../../Metadata/Metadata.h"
 
 
 
@@ -21,7 +22,7 @@
 class AudioPlayerView : public juce::Component, public juce::ChangeListener
 {
 public:
-    AudioPlayerView (AudioPlayerState& s, AudioMetadata& m);
+    AudioPlayerView (AudioPlayerState& s, Metadata& m);
     ~AudioPlayerView() override;
 
     void paint (juce::Graphics&) override;
@@ -45,7 +46,7 @@ private:
     void update();
     
     AudioPlayerState& state;
-    AudioMetadata& metadata;
+    Metadata& metadata;
     juce::TextButton loadAudioButton { "Load" };
     juce::TextButton playAudioButton { "Play" };
     juce::TextButton stopAudioButton { "Stop" };

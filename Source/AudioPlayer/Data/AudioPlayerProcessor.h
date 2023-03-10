@@ -16,7 +16,8 @@
 #include <fileref.h>
 #include <tag.h>
 
-
+#include "../../Metadata/Metadata.h"
+#include "../../Metadata/TagReader.h"
 #include "../State/AudioPlayerState.h"
 
 
@@ -37,7 +38,7 @@ public:
     void convertSamplesToTime();
     float getPercentagePlayedInTrack();
     AudioPlayerState& getState() { return state; }
-    AudioMetadata& getMetadata() { return metadata; }
+    Metadata& getMetadata() { return metadata; }
     juce::AudioFormatManager& getAudioFormatManager() { return audioFormatManager; }
     juce::AudioBuffer<float>& getTrackBuffer() { return audioSourceBuffer; }
     
@@ -76,7 +77,7 @@ private:
     
     /* Holds the state & metadata of our player */
     AudioPlayerState state;
-    AudioMetadata metadata;
+    Metadata metadata;
 };
 
 

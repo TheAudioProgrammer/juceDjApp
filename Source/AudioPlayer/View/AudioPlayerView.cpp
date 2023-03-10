@@ -11,7 +11,7 @@
 #include "AudioPlayerView.h"
 
 //==============================================================================
-AudioPlayerView::AudioPlayerView (AudioPlayerState& s, AudioMetadata& m)
+AudioPlayerView::AudioPlayerView (AudioPlayerState& s, Metadata& m)
 : state (s)
 , metadata (m)
 {
@@ -81,7 +81,7 @@ void AudioPlayerView::paint (juce::Graphics& g)
 {
     g.fillAll (juce::Colours::black);
     drawDisc (g);
-    trackLengthLabel.setText (metadata.trackCurrentTime, juce::dontSendNotification);
+    trackLengthLabel.setText (metadata.currentTime, juce::dontSendNotification);
 }
 
 void AudioPlayerView::drawDisc (juce::Graphics& g)
@@ -138,8 +138,8 @@ void AudioPlayerView::changeListenerCallback (juce::ChangeBroadcaster* source)
 
 void AudioPlayerView::update()
 {
-    trackNameLabel.setText (metadata.trackName, juce::dontSendNotification);
-    artistNameLabel.setText (metadata.artistName, juce::dontSendNotification);
-    trackLengthLabel.setText (metadata.trackCurrentTime, juce::dontSendNotification);
+    trackNameLabel.setText (metadata.title, juce::dontSendNotification);
+    artistNameLabel.setText (metadata.artist, juce::dontSendNotification);
+    trackLengthLabel.setText (metadata.currentTime, juce::dontSendNotification);
     repaint();
 }

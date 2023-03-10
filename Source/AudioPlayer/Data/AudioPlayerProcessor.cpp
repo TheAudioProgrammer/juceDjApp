@@ -47,7 +47,7 @@ void AudioPlayerProcessor::convertSamplesToTime()
     auto seconds = (minutes - std::floor (minutes)) * 60.0;
     auto hundreths = (seconds - std::floor (seconds)) * 100.0;
     
-    metadata.trackCurrentTime = convertTimeToString (minutes) + ":" + convertTimeToString (seconds) + ":" + convertTimeToString (hundreths);
+    metadata.currentTime = convertTimeToString (minutes) + ":" + convertTimeToString (seconds) + ":" + convertTimeToString (hundreths);
 }
 
 juce::String AudioPlayerProcessor::convertTimeToString (double time)
@@ -62,45 +62,7 @@ float AudioPlayerProcessor::getPercentagePlayedInTrack()
 
 void AudioPlayerProcessor::loadMetadata (const juce::File& musicFile)
 {
-    TagLib::FileRef tagReader (musicFile.getFullPathName().toUTF8());
-    
-    if (! tagReader.isNull() && tagReader.tag())
-    {
-        TagLib::Tag* rawTag = tagReader.tag();
-        auto tag = std::unique_ptr<TagLib::Tag>(rawTag);
-
-        std::cout << "-- TAG (basic) --" << std::endl;
-        std::cout << "title   - \"" << tag->title()   << "\"" << std::endl;
-        std::cout << "artist  - \"" << tag->artist()  << "\"" << std::endl;
-        std::cout << "album   - \"" << tag->album()   << "\"" << std::endl;
-        std::cout << "year    - \"" << tag->year()    << "\"" << std::endl;
-        std::cout << "comment - \"" << tag->comment() << "\"" << std::endl;
-        std::cout << "track   - \"" << tag->track()   << "\"" << std::endl;
-        std::cout << "genre   - \"" << tag->genre()   << "\"" << std::endl;
-        
-        metadata.trackName = juce::String (tag->title().toCString());
-        metadata.artistName = juce::String (tag->artist().toCString());
-    
-        if(! tagReader.isNull() && tagReader.audioProperties())
-        {
-            
-            TagLib::AudioProperties *properties = tagReader.audioProperties();
-            
-            int seconds = properties->length() % 60;
-            int minutes = (properties->length() - seconds) / 60;
-            
-            std::cout << "-- AUDIO --" << std::endl;
-            std::cout << "bitrate     - " << properties->bitrate() << std::endl;
-            std::cout << "sample rate - " << properties->sampleRate() << std::endl;
-            std::cout << "channels    - " << properties->channels() << std::endl;
-            std::cout << "length      - " << minutes << ":" << std::setfill('0') << std::setw(2) << seconds << std::endl;
-        }
-    }
-    else
-    {
-        metadata.trackName = musicFile.getFileNameWithoutExtension();
-        metadata.artistName = "Unknown";
-    }
+    metadata = TagReader::getMetadataFromFile (musicFile);
 }
 
 void AudioPlayerProcessor::prepareToPlay (int numChannels, int samplesPerBlock, double sampleRate)

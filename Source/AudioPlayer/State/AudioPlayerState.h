@@ -12,15 +12,6 @@
 
 #include <juce_events/juce_events.h>
 
-/* Holds loaded track data */
-struct AudioMetadata 
-{
-    juce::String artistName { "" };
-    juce::String trackName { "" };
-    juce::String trackCurrentTime { "" };
-    juce::String trackLength { "" };
-};
-
 // Set by the processor, observed by the view
 struct AudioPlayerState : public juce::ChangeBroadcaster
 {
