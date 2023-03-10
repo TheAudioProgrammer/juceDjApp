@@ -4,6 +4,61 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 
 
+class XmlEditor
+{
+public:
+    void createNewXml()
+    {
+        // See if our XML exists in the resources folder...if not, create one!  This is just a temporary location as a proof of concept
+        auto newXml = juce::File ("/Users/theaudioprogrammer/Development/JUCE/audioProgrammer/juceDjApp/Source/Resources/Assets/TrackList.xml");
+        
+        auto success = newXml.create();
+        
+        if (success)
+        {
+            juce::XmlElement library ("Library");
+                        
+            auto directory = juce::File ("/Users/theaudioprogrammer/Desktop");
+            auto fileList = directory.findChildFiles (juce::File::TypesOfFileToFind::findFiles, true, "*.mp3;*.wav" );
+            
+            for (int i = 0; i < fileList.size(); i++)
+            {
+                juce::XmlElement* metadata = new juce::XmlElement ("AudioFile");
+                metadata->setAttribute ("Track", "Some Song");
+                metadata->setAttribute ("Artist", "My Favorite DJ");
+                metadata->setAttribute ("Path", fileList[i].getFullPathName());
+                library.addChildElement (metadata);
+            }
+            
+            library.writeTo (newXml);
+                        
+//            directorySelector = std::make_unique<juce::FileChooser>("Select a directory for tracks", juce::File::getSpecialLocation (juce::File::SpecialLocationType::userDesktopDirectory));
+//
+//            auto songSelectorFlags = juce::FileBrowserComponent::canSelectDirectories;
+//
+//            directorySelector->launchAsync (songSelectorFlags, [&] (const juce::FileChooser& chooser)
+//            {
+//                auto fileList = chooser.getResult().findChildFiles (juce::File::TypesOfFileToFind::findFiles, true, "*.mp3;*.wav");
+//
+//                for (int i = 0; i < fileList.size(); i++)
+//                {
+//                    auto metadata = std::make_unique<juce::XmlElement>("AudioFile");
+//                    metadata->setAttribute ("Track", "Some Song");
+//                    metadata->setAttribute ("Artist", "My Favorite DJ");
+//                    metadata->setAttribute ("Path", fileList[i].getFullPathName());
+//                    metadata->setAttribute ("Type", fileList[i].getFileExtension());
+//                    library.addChildElement (metadata.get());
+//                }
+//            });
+            
+            library.writeTo (newXml);
+        }
+    }
+    
+private:
+    std::unique_ptr<juce::FileChooser> directorySelector;
+};
+
 class TrackListCell : public juce::Component
 {
 public:
@@ -38,8 +93,7 @@ private:
 
 
 class TrackListView : public juce::Component,
-                      public juce::TableListBoxModel,
-                      public juce::ChangeListener
+                      public juce::TableListBoxModel
 {
 public:
     TrackListView()
@@ -51,15 +105,12 @@ public:
         listBox.setColour (juce::ListBox::ColourIds::backgroundColourId, juce::Colours::black);
         addAndMakeVisible (listBox);
         
-    }
-    
-    void changeListenerCallback (juce::ChangeBroadcaster* source) override
-    {
-        DBG ("Change Called!");
-        refreshComponentForCell (1, 1, false, nullptr);
-//        refreshComponentForCell (2, 1, false, nullptr);
-        listBox.updateContent();
-        DBG (getNumRows());
+        directoryLoadButton.onClick = [&]()
+        {
+            xmlEditor.createNewXml();
+        };
+        
+        addAndMakeVisible (directoryLoadButton);
     }
     
     int getNumRows() override
@@ -113,11 +164,14 @@ public:
     void resized() override
     {
         listBox.setBounds (getLocalBounds());
+        directoryLoadButton.setBounds (10, 40, 100, 50);
     }
     
     
 private:
     juce::TableListBox listBox { "TrackList", this };
+    juce::TextButton directoryLoadButton;
+    XmlEditor xmlEditor;
     int numRows = 0;
 };
 
