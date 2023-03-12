@@ -5,44 +5,60 @@
 #include "../../Metadata/Metadata.h"
 #include "../../Metadata/TagReader.h"
 
-
 class XmlEditor
 {
 public:
+    /* See if our XML exists in the resources folder...if not, create one!  This is just a temporary location as a proof of concept */
     void createNewXml()
     {
-        // See if our XML exists in the resources folder...if not, create one!  This is just a temporary location as a proof of concept
-        auto newXml = juce::File ("/Users/theaudioprogrammer/Development/JUCE/audioProgrammer/juceDjApp/Source/Resources/Assets/TrackList.xml");
-        
-        auto success = newXml.create();
-        
-        if (success)
+        // If we need to create a new xml...
+        if (xmlDirectory.create())
         {
-            juce::XmlElement library ("Library");
+            juce::XmlElement xml ("Library");
                         
-            auto directory = juce::File ("/Users/theaudioprogrammer/Desktop");
-            auto fileList = directory.findChildFiles (juce::File::TypesOfFileToFind::findFiles, true, "*.mp3;*.wav" );
+            // For now I've set this to the desktop to prove the concept, but eventually we would want to be able to choose any directory, and be able to extend our Xml as we add new directories
+            auto directory = juce::File (trackListDirectory);
             
-            for (int i = 0; i < fileList.size(); i++)
+            // Look for all audio files in the directory we give it
+            auto tracksInDirectory = directory.findChildFiles (juce::File::TypesOfFileToFind::findFiles, true, "*.mp3;*.wav" );
+            
+            // Create the xml from the metadata in each audio file
+            for (auto& track : tracksInDirectory)
             {
                 juce::XmlElement* fileData = new juce::XmlElement ("AudioFile");
                 
-                auto metadata = TagReader::getMetadataFromFile (fileList[i]);
+                auto metadata = TagReader::getMetadataFromFile (track);
                 
                 fileData->setAttribute ("Title", metadata.title);
                 fileData->setAttribute ("Artist", metadata.artist);
                 fileData->setAttribute ("Path", metadata.path);
                 
-                library.addChildElement (fileData);
+                xml.addChildElement (fileData);
             }
             
-            library.writeTo (newXml);
+            xml.writeTo (xmlDirectory);
         }
+    }
+    
+    
+    bool xmlExists()
+    {
+        return xmlDirectory.exists();
+    }
+    
+    juce::File getXml()
+    {
+        return xmlDirectory;
     }
     
 private:
     std::unique_ptr<juce::FileChooser> directorySelector;
+    // Just a proof of concept for now
+    juce::File xmlDirectory { "/Users/theaudioprogrammer/Development/JUCE/audioProgrammer/juceDjApp/Source/Resources/Assets/TrackList.xml" };
+    juce::String trackListDirectory { "/Users/theaudioprogrammer/Desktop" };
+    
 };
+
 
 class TrackListCell : public juce::Component
 {
@@ -83,19 +99,39 @@ class TrackListView : public juce::Component,
 public:
     TrackListView()
     {
-        listBox.getHeader().addColumn ("Track", 1, 80);
-        listBox.getHeader().addColumn ("Artist", 2, 80);
-        listBox.getHeader().addColumn ("Length", 3, 80);
-        
-        listBox.setColour (juce::ListBox::ColourIds::backgroundColourId, juce::Colours::black);
-        addAndMakeVisible (listBox);
+        const auto callback = [this]()
+        {
+            if (xmlDirectory.exists())
+            {
+                auto data = juce::XmlDocument::parse (xmlDirectory);
+                dataList = data->getChildByName ("AudioFile");
+                columnList = data->getChildByName ("Library");
+                
+                if (columnList)
+                {
+                        listBox.getHeader().addColumn ("Track", 1, 80);
+                        listBox.getHeader().addColumn ("Artist", 2, 80);
+                        listBox.getHeader().addColumn ("Length", 3, 80);
+                }
+            }
+        };
         
         directoryLoadButton.onClick = [&]()
         {
             xmlEditor.createNewXml();
         };
         
+        listBox.setColour (juce::ListBox::ColourIds::backgroundColourId, juce::Colours::black);
+        addAndMakeVisible (listBox);
         addAndMakeVisible (directoryLoadButton);
+    }
+    
+    void loadData (juce::File xml)
+    {
+        if (! xml.exists())
+            return;
+        
+        
     }
     
     int getNumRows() override
@@ -107,6 +143,7 @@ public:
     {
         //g.fillAll (juce::Colours::black);
     }
+    
     
     void paintCell (juce::Graphics& g, int rowNumber, int columnId, int width, int height, bool rowIsSelected) override
     {
@@ -155,6 +192,11 @@ public:
     
 private:
     juce::TableListBox listBox { "TrackList", this };
+    // Just a proof of concept for now
+    juce::File xmlDirectory { "/Users/theaudioprogrammer/Development/JUCE/audioProgrammer/juceDjApp/Source/Resources/Assets/TrackList.xml" };
+    std::unique_ptr<juce::XmlElement> trackList;
+    juce::XmlElement* columnList { nullptr };
+    juce::XmlElement* dataList { nullptr };
     juce::TextButton directoryLoadButton;
     XmlEditor xmlEditor;
     int numRows = 0;
