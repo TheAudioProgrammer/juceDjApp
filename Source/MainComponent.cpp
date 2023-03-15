@@ -67,7 +67,7 @@ void MainComponent::resized()
     settingsView.setBounds (10, 10, 100, 50);
     audioPlayer1.playerView.setBounds (10, settingsView.getBottom() + pad, 600, 300);
     audioPlayer1.waveformView.setBounds (audioPlayer1.playerView.getRight() + pad, settingsView.getBottom() + pad, 600, 100);
-    trackView.setBounds (10,audioPlayer1.playerView.getBottom() + pad, 600, 200);
+    trackView.setBounds (10,audioPlayer1.playerView.getBottom() + pad, 1200, 400);
 }
 
 
