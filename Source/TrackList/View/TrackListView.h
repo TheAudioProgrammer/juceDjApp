@@ -95,33 +95,30 @@ class TrackListView : public juce::Component,
 public:
     TrackListView()
     {
-        if (xmlDirectory.exists())
-        {
-            auto data = juce::XmlDocument::parse (xmlDirectory);
-            dataList = data->getChildByName ("LIBRARY");
-            columnList = data->getChildByName ("HEADERS");
+        jassert (xmlDirectory.exists());
+        xmlData = juce::XmlDocument::parse (xmlDirectory);
+        trackList = xmlData->getChildByName ("LIBRARY");
+        headerList = xmlData->getChildByName ("HEADERS");
             
-            jassert (columnList);
-            jassert (dataList);
-                
-            if (columnList)
-            {
-                for (auto* column : columnList->getChildIterator())
-                {
-                    listBox.getHeader().addColumn (column->getStringAttribute ("name"),
-                                                   column->getIntAttribute ("columnId"),
-                                                   column->getIntAttribute ("width"));
-                }
-            }
-                
-            if (dataList)
-                numRows = dataList->getNumChildElements();
-        };
-        
-        directoryLoadButton.onClick = [&]()
+        jassert (headerList);
+        jassert (trackList);
+            
+        if (headerList)
         {
-            xmlEditor.createNewXml();
-        };
+            for (auto* column : headerList->getChildIterator())
+            {
+                listBox.getHeader().addColumn (column->getStringAttribute ("name"),
+                                               column->getIntAttribute ("columnId"),
+                                               column->getIntAttribute ("width"));
+            }
+        }
+                
+        numRows = trackList->getNumChildElements();
+                
+//        directoryLoadButton.onClick = [&]()
+//        {
+//            xmlEditor.createNewXml();
+//        };
         
         listBox.setColour (juce::ListBox::ColourIds::backgroundColourId, juce::Colours::black);
         addAndMakeVisible (listBox);
@@ -141,15 +138,15 @@ public:
     
     void paintRowBackground (juce::Graphics& g, int rowNumber, int width, int height, bool rowIsSelected) override
     {
-        juce::ignoreUnused (rowNumber, width, height, rowIsSelected);
-        g.fillAll (juce::Colours::black);
+        juce::ignoreUnused (g, rowNumber, width, height, rowIsSelected);
+        //g.fillAll (juce::Colours::black);
     }
     
     
     void paintCell (juce::Graphics& g, int rowNumber, int columnId, int width, int height, bool rowIsSelected) override
     {
-        juce::ignoreUnused (columnId, rowNumber, width, height, rowIsSelected);
-        g.fillAll (juce::Colours::orangered);
+        juce::ignoreUnused (g, columnId, rowNumber, width, height, rowIsSelected);
+        //g.fillAll (juce::Colours::orangered);
     }
     
     Component* refreshComponentForCell (int rowNumber, int columnId, bool isRowSelected, juce::Component* existingComponentToUpdate) override
@@ -159,43 +156,43 @@ public:
         if (columnId == 1)
         {
             auto* selectionBox = static_cast<TrackListCell*> (existingComponentToUpdate);
-    
+
             if (selectionBox == nullptr)
                 selectionBox = new TrackListCell (*this);
-    
-            selectionBox->setRowAndColumn (rowNumber, columnId);
+
+            selectionBox->setColumnAndRow (columnId, rowNumber);
             return selectionBox;
         }
-    
+
         if (columnId == 2)
         {
             auto* textLabel = static_cast<TrackListCell*> (existingComponentToUpdate);
-    
+
             if (textLabel == nullptr)
                 textLabel = new TrackListCell (*this);
-    
-            textLabel->setRowAndColumn (rowNumber, columnId);
+
+            textLabel->setColumnAndRow (columnId, rowNumber);
             return textLabel;
         }
-        
+
         if (columnId == 3)
         {
             auto* textLabel = static_cast<TrackListCell*> (existingComponentToUpdate);
-    
+
             if (textLabel == nullptr)
                 textLabel = new TrackListCell (*this);
-    
-            textLabel->setRowAndColumn (rowNumber, columnId);
+
+            textLabel->setColumnAndRow (columnId, rowNumber);
             return textLabel;
         }
-    
+
         jassert (existingComponentToUpdate == nullptr);
         return nullptr;
     }
     
     juce::String getAttributeNameForColumnId (const int columnId) const
     {
-        for (auto* column : columnList->getChildIterator())
+        for (auto* column : headerList->getChildIterator())
         {
             if (column->getIntAttribute ("columnId") == columnId)
                 return column->getStringAttribute ("name");
@@ -207,30 +204,12 @@ public:
     void setText (const int columnNumber, const int rowNumber, const juce::String& newText)
     {
         const auto& columnName = listBox.getHeader().getColumnName (columnNumber);
-        dataList->getChildElement (rowNumber)->setAttribute (columnName, newText);
+        trackList->getChildElement (rowNumber)->setAttribute (columnName, newText);
     }
     
     juce::String getText (const int columnNumber, const int rowNumber)
     {
-        if (! dataList)
-            return "";
-        
-        auto numElements = dataList->getNumChildElements();
-        
-        // Check we're not trying to read into data that doesn't exist...
-        if (rowNumber < numElements)
-        {
-            auto numAttributes = dataList->getChildElement (rowNumber)->getNumAttributes();
-            
-            if (columnNumber < numAttributes)
-            {
-                return dataList->getChildElement (rowNumber)->getStringAttribute (getAttributeNameForColumnId (columnNumber));
-            }
-            else
-                return "";
-        }
-        else
-            return "";
+        return trackList->getChildElement (rowNumber)->getStringAttribute (getAttributeNameForColumnId (columnNumber));
     }
     
     
@@ -241,12 +220,12 @@ public:
     }
     
 private:
-    juce::TableListBox listBox { "TrackList", this };
+    juce::TableListBox listBox { "TrackListBox", this };
     // Just a proof of concept for now
     juce::File xmlDirectory { "/Users/theaudioprogrammer/Development/JUCE/audioProgrammer/juceDjApp/Source/Resources/Assets/TrackList.xml" };
-    std::unique_ptr<juce::XmlElement> trackList;
-    juce::XmlElement* columnList { nullptr };
-    juce::XmlElement* dataList { nullptr };
+    std::unique_ptr<juce::XmlElement> xmlData;
+    juce::XmlElement* headerList { nullptr };
+    juce::XmlElement* trackList { nullptr };
     juce::TextButton directoryLoadButton;
     XmlEditor xmlEditor;
     int numRows = 0;
@@ -260,16 +239,16 @@ private:
             addAndMakeVisible (myLabel);
         }
 
-        void setRowAndColumn (const int newRow, const int newColumn)
+        void setColumnAndRow (const int newColumn, const int newRow)
         {
-            row = newRow;
             columnId = newColumn;
+            row = newRow;
             myLabel.setText (owner.getText (columnId, row) , juce::dontSendNotification);
         }
 
         void paint (juce::Graphics& g) override
         {
-            g.fillAll (juce::Colours::yellowgreen);
+            g.fillAll (juce::Colours::darkgrey);
         }
 
         void resized() override
@@ -278,7 +257,7 @@ private:
         }
 
     private:
-        juce::Label myLabel { "Blah", "Blah" };
+        juce::Label myLabel { "", "" };
         int row = 0;
         int columnId = 0;
         TrackListView& owner;
