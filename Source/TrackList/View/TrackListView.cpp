@@ -3,18 +3,14 @@
 
 TrackListView::TrackListView()
 {
+    if (! xmlDirectory.exists())
+        xmlTrackList.createNewXml();
+    
     loadData (xmlDirectory);
             
     numRows = trackList->getNumChildElements();
-            
-//        directoryLoadButton.onClick = [&]()
-//        {
-//            xmlTrackList.createNewXml();
-//        };
-    
     listBox.setColour (juce::ListBox::ColourIds::backgroundColourId, juce::Colours::black);
     addAndMakeVisible (listBox);
-    addAndMakeVisible (directoryLoadButton);
 }
 
 void TrackListView::loadData (juce::File xmlDir)
@@ -43,17 +39,54 @@ int TrackListView::getNumRows()
     return numRows;
 }
 
-// Since we're using a custom component this doesn't apply
+int TrackListView::getColumnAutoSizeWidth (int columnId)
+{
+    if (columnId == 9)
+        return 50;
+
+    int widest = 32;
+
+    for (auto i = getNumRows(); --i >= 0;)
+    {
+        if (auto* rowElement = trackList->getChildElement (i))
+        {
+            auto text = rowElement->getStringAttribute (getAttributeNameForColumnId (columnId));
+
+            widest = juce::jmax (widest, font.getStringWidth (text));
+        }
+    }
+
+    return widest + 8;
+}
+
 void TrackListView::paintRowBackground (juce::Graphics& g, int rowNumber, int width, int height, bool rowIsSelected)
 {
-    juce::ignoreUnused (g, rowNumber, width, height, rowIsSelected);
-    g.fillAll (juce::Colours::darkgrey);
+    juce::ignoreUnused (width, height);
+    
+    auto alternateColour = getLookAndFeel().findColour (juce::ListBox::backgroundColourId)
+                                           .interpolatedWith (getLookAndFeel().findColour (juce::ListBox::textColourId), 0.03f);
+    if (rowIsSelected)
+        g.fillAll (juce::Colours::dimgrey);
+    else if (rowNumber % 2)
+        g.fillAll (alternateColour);
+    
+    g.setColour (juce::Colours::white.withAlpha (0.2f));
+    g.drawRect (getLocalBounds());
 }
 
 void TrackListView::paintCell (juce::Graphics& g, int rowNumber, int columnId, int width, int height, bool rowIsSelected) 
 {
-    juce::ignoreUnused (g, columnId, rowNumber, width, height, rowIsSelected);
-    g.fillAll (juce::Colours::orangered);
+    g.setColour (rowIsSelected ? juce::Colours::darkblue : getLookAndFeel().findColour (juce::ListBox::textColourId));
+    g.setFont (font);
+
+    if (auto* rowElement = trackList->getChildElement (rowNumber))
+    {
+        auto text = rowElement->getStringAttribute (getAttributeNameForColumnId (columnId));
+        g.drawText (text, 2, 0, width - 4, height, juce::Justification::centredLeft, true);
+    }
+
+    g.setColour (getLookAndFeel().findColour (juce::ListBox::backgroundColourId));
+    g.fillRect (width - 1, 0, 1, height);
 }
 
 juce::Component* TrackListView::refreshComponentForCell (int rowNumber, int columnId, bool isRowSelected, juce::Component* existingComponentToUpdate)
@@ -122,5 +155,4 @@ juce::String TrackListView::getText (const int columnNumber, const int rowNumber
 void TrackListView::resized() 
 {
     listBox.setBounds (getLocalBounds());
-    //directoryLoadButton.setBounds (10, 40, 100, 50);
 }
