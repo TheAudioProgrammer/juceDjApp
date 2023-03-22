@@ -11,7 +11,8 @@ class TrackListView : public juce::Component,
 {
 public:
     TrackListView();
-    void loadData (juce::File xmlDir);
+    ~TrackListView() override;
+    void loadData (juce::File& xmlDir);
     
     // From TableListBoxmodel
     int getNumRows() override;

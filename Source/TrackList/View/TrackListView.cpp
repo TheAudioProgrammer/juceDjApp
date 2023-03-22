@@ -13,7 +13,12 @@ TrackListView::TrackListView()
     addAndMakeVisible (listBox);
 }
 
-void TrackListView::loadData (juce::File xmlDir)
+TrackListView::~TrackListView()
+{
+    listBox.setModel (nullptr);
+}
+
+void TrackListView::loadData (juce::File& xmlDir)
 {
     jassert (xmlDir.exists());
     xmlData = juce::XmlDocument::parse (xmlDir);

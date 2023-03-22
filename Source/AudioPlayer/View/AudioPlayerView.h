@@ -19,7 +19,8 @@
 //==============================================================================
 /*
 */
-class AudioPlayerView : public juce::Component, public juce::ChangeListener
+class AudioPlayerView : public juce::Component,
+                        public juce::ChangeListener
 {
 public:
     AudioPlayerView (AudioPlayerState& s, Metadata& m);
