@@ -20,6 +20,7 @@
 /*
 */
 class AudioPlayerView : public juce::Component,
+                        public juce::DragAndDropTarget,
                         public juce::ChangeListener
 {
 public:
@@ -31,6 +32,11 @@ public:
     
     // From ChangeListener
     void changeListenerCallback (juce::ChangeBroadcaster* source) override;
+    
+    // From Drag and drop target
+    void itemDragEnter (const juce::DragAndDropTarget::SourceDetails& dragSourceDetails) override;
+    bool isInterestedInDragSource (const juce::DragAndDropTarget::SourceDetails& dragSourceDetails) override;
+    void itemDropped (const juce::DragAndDropTarget::SourceDetails& dragSourceDetails) override;
     
     double getGainSliderValue() const { return gainSlider.getValue(); }
     

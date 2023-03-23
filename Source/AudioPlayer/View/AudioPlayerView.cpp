@@ -136,6 +136,21 @@ void AudioPlayerView::changeListenerCallback (juce::ChangeBroadcaster* source)
         update();
 }
 
+void AudioPlayerView::itemDragEnter (const juce::DragAndDropTarget::SourceDetails& dragSourceDetails)
+{
+    DBG ("Bang");
+}
+
+bool AudioPlayerView::isInterestedInDragSource (const juce::DragAndDropTarget::SourceDetails& dragSourceDetails)
+{
+    return true;
+}
+
+void AudioPlayerView::itemDropped (const juce::DragAndDropTarget::SourceDetails& dragSourceDetails)
+{
+    DBG ((juce::String)dragSourceDetails.description);
+}
+
 void AudioPlayerView::update()
 {
     trackNameLabel.setText (metadata.title, juce::dontSendNotification);

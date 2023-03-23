@@ -11,6 +11,7 @@ TrackListView::TrackListView()
     numRows = trackList->getNumChildElements();
     listBox.setColour (juce::ListBox::ColourIds::backgroundColourId, juce::Colours::black);
     addAndMakeVisible (listBox);
+    addAndMakeVisible (sample);
 }
 
 TrackListView::~TrackListView()
@@ -159,5 +160,7 @@ juce::String TrackListView::getText (const int columnNumber, const int rowNumber
 
 void TrackListView::resized() 
 {
+    
     listBox.setBounds (getLocalBounds());
+    sample.setBounds (10, 100, 100, 50);
 }
