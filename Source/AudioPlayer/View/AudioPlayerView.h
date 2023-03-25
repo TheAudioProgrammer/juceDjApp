@@ -64,5 +64,7 @@ private:
     juce::Label artistNameLabel { "Artist Name" };
     juce::Label trackLengthLabel { "Song Length" };
     
+    bool somethingIsBeingDraggedOver = false;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPlayerView)
 };

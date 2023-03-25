@@ -1,33 +1,26 @@
 
 #include "TrackListView.h"
 
-TrackListView::TrackListView()
+Playlist::Playlist()
 {
     if (! xmlDirectory.exists())
         xmlTrackList.createNewXml();
     
     loadData (xmlDirectory);
-            
-    numRows = trackList->getNumChildElements();
-    listBox.setColour (juce::ListBox::ColourIds::backgroundColourId, juce::Colours::black);
-    addAndMakeVisible (listBox);
-    addAndMakeVisible (sample);
 }
 
-TrackListView::~TrackListView()
+Playlist::~Playlist()
 {
     listBox.setModel (nullptr);
 }
 
-void TrackListView::loadData (juce::File& xmlDir)
+void Playlist::loadData (juce::File& xmlDir)
 {
     jassert (xmlDir.exists());
     xmlData = juce::XmlDocument::parse (xmlDir);
     trackList = xmlData->getChildByName ("LIBRARY");
     headerList = xmlData->getChildByName ("HEADERS");
-        
-    jassert (headerList);
-    jassert (trackList);
+    numRows = trackList->getNumChildElements();
         
     if (headerList)
     {
@@ -38,14 +31,17 @@ void TrackListView::loadData (juce::File& xmlDir)
                                            column->getIntAttribute ("width"));
         }
     }
+        
+    jassert (headerList);
+    jassert (trackList);
 }
 
-int TrackListView::getNumRows()
+int Playlist::getNumRows()
 {
     return numRows;
 }
 
-int TrackListView::getColumnAutoSizeWidth (int columnId)
+int Playlist::getColumnAutoSizeWidth (int columnId)
 {
     if (columnId == 9)
         return 50;
@@ -65,24 +61,22 @@ int TrackListView::getColumnAutoSizeWidth (int columnId)
     return widest + 8;
 }
 
-void TrackListView::paintRowBackground (juce::Graphics& g, int rowNumber, int width, int height, bool rowIsSelected)
+void Playlist::paintRowBackground (juce::Graphics& g, int rowNumber, int width, int height, bool rowIsSelected)
 {
     juce::ignoreUnused (width, height);
-    
-    auto alternateColour = getLookAndFeel().findColour (juce::ListBox::backgroundColourId)
-                                           .interpolatedWith (getLookAndFeel().findColour (juce::ListBox::textColourId), 0.03f);
+
     if (rowIsSelected)
         g.fillAll (juce::Colours::dimgrey);
     else if (rowNumber % 2)
-        g.fillAll (alternateColour);
-    
+        g.fillAll (juce::Colours::black);
+
     g.setColour (juce::Colours::white.withAlpha (0.2f));
-    g.drawRect (getLocalBounds());
+    g.fillRect (width - 1, 0, 1, height);
 }
 
-void TrackListView::paintCell (juce::Graphics& g, int rowNumber, int columnId, int width, int height, bool rowIsSelected) 
+void Playlist::paintCell (juce::Graphics& g, int rowNumber, int columnId, int width, int height, bool rowIsSelected)
 {
-    g.setColour (rowIsSelected ? juce::Colours::darkblue : getLookAndFeel().findColour (juce::ListBox::textColourId));
+    g.setColour (rowIsSelected ? juce::Colours::darkblue : juce::Colours::white);
     g.setFont (font);
 
     if (auto* rowElement = trackList->getChildElement (rowNumber))
@@ -91,11 +85,11 @@ void TrackListView::paintCell (juce::Graphics& g, int rowNumber, int columnId, i
         g.drawText (text, 2, 0, width - 4, height, juce::Justification::centredLeft, true);
     }
 
-    g.setColour (getLookAndFeel().findColour (juce::ListBox::backgroundColourId));
+    g.setColour (juce::Colours::black);
     g.fillRect (width - 1, 0, 1, height);
 }
 
-juce::Component* TrackListView::refreshComponentForCell (int rowNumber, int columnId, bool isRowSelected, juce::Component* existingComponentToUpdate)
+juce::Component* Playlist::refreshComponentForCell (int rowNumber, int columnId, bool isRowSelected, juce::Component* existingComponentToUpdate)
 {
     juce::ignoreUnused (isRowSelected);
     
@@ -136,7 +130,7 @@ juce::Component* TrackListView::refreshComponentForCell (int rowNumber, int colu
     return nullptr;
 }
 
-juce::String TrackListView::getAttributeNameForColumnId (const int columnId) const
+juce::String Playlist::getAttributeNameForColumnId (const int columnId) const
 {
     for (auto* column : headerList->getChildIterator())
     {
@@ -147,20 +141,15 @@ juce::String TrackListView::getAttributeNameForColumnId (const int columnId) con
     return {};
 }
 
-void TrackListView::setText (const int columnNumber, const int rowNumber, const juce::String& newText)
+void Playlist::setText (const int columnNumber, const int rowNumber, const juce::String& newText)
 {
     const auto& columnName = listBox.getHeader().getColumnName (columnNumber);
     trackList->getChildElement (rowNumber)->setAttribute (columnName, newText);
 }
 
-juce::String TrackListView::getText (const int columnNumber, const int rowNumber)
+juce::String Playlist::getText (const int columnNumber, const int rowNumber)
 {
     return trackList->getChildElement (rowNumber)->getStringAttribute (getAttributeNameForColumnId (columnNumber));
 }
 
-void TrackListView::resized() 
-{
-    
-    listBox.setBounds (getLocalBounds());
-    sample.setBounds (10, 100, 100, 50);
-}
+

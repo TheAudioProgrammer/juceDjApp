@@ -82,6 +82,12 @@ void AudioPlayerView::paint (juce::Graphics& g)
     g.fillAll (juce::Colours::black);
     drawDisc (g);
     trackLengthLabel.setText (metadata.currentTime, juce::dontSendNotification);
+    
+    if (somethingIsBeingDraggedOver)
+    {
+        g.setColour (juce::Colours::red);
+        g.drawRect (getLocalBounds(), 3);
+    }
 }
 
 void AudioPlayerView::drawDisc (juce::Graphics& g)
@@ -136,18 +142,19 @@ void AudioPlayerView::changeListenerCallback (juce::ChangeBroadcaster* source)
         update();
 }
 
-void AudioPlayerView::itemDragEnter (const juce::DragAndDropTarget::SourceDetails& dragSourceDetails)
+void AudioPlayerView::itemDragEnter (const juce::DragAndDropTarget::SourceDetails& /* dragSourceDetails */)
 {
-    DBG ("Bang");
+    somethingIsBeingDraggedOver = true;
 }
 
-bool AudioPlayerView::isInterestedInDragSource (const juce::DragAndDropTarget::SourceDetails& dragSourceDetails)
+bool AudioPlayerView::isInterestedInDragSource (const juce::DragAndDropTarget::SourceDetails& /* dragSourceDetails */)
 {
     return true;
 }
 
 void AudioPlayerView::itemDropped (const juce::DragAndDropTarget::SourceDetails& dragSourceDetails)
 {
+    somethingIsBeingDraggedOver = false;
     DBG ((juce::String)dragSourceDetails.description);
 }
 

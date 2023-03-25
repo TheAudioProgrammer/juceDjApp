@@ -14,8 +14,8 @@
 // Encapsulated objects (UI, Data & State)
 #include "AudioPlayer/AudioPlayer.h"
 
+// Playlist
 #include "TrackList/View/TrackListView.h"
-
 
 
 //==============================================================================
@@ -41,7 +41,6 @@ public:
     void resized() override;
     
     //==============================================================================
-    // From Timer
 
 private:
     // Checks our list of USB devices when a new device is connected
@@ -51,7 +50,7 @@ private:
     
     AudioPlayer audioPlayer1;
     
-    TrackListView trackView;
+    Playlist playlist;
         
     bool fileIsLoaded { false };
     
