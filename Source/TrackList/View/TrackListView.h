@@ -31,7 +31,7 @@ public:
     {
         juce::ignoreUnused (selectedRows);
         DBG ("YESSSSS");
-        return "Blah";
+        return getText (3, currentRow);
     }
     
     juce::Component& getComponent() { return listBox; }
@@ -44,6 +44,7 @@ private:
     juce::File xmlDirectory { "/Users/theaudioprogrammer/Development/JUCE/audioProgrammer/juceDjApp/Source/Resources/Assets/TrackList.xml" };
     XmlTrackList xmlTrackList;
     int numRows = 0;
+    int currentRow = 0;
     juce::Font font { 14.0f };
 
     

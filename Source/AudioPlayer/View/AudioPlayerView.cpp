@@ -155,7 +155,8 @@ bool AudioPlayerView::isInterestedInDragSource (const juce::DragAndDropTarget::S
 void AudioPlayerView::itemDropped (const juce::DragAndDropTarget::SourceDetails& dragSourceDetails)
 {
     somethingIsBeingDraggedOver = false;
-    DBG ((juce::String)dragSourceDetails.description);
+    pathToDroppedTrack = dragSourceDetails.description;
+    onTrackDroppedFromPlayList();
 }
 
 void AudioPlayerView::update()

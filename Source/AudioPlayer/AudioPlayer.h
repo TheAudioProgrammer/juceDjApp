@@ -43,6 +43,11 @@ struct AudioPlayer : public juce::Timer
             processor.setDecibelValue (static_cast<float>(playerView.getGainSliderValue()));
         };
         
+        playerView.onTrackDroppedFromPlayList = [this]()
+        {
+            processor.loadTrack (playerView.pathToDroppedTrack);
+        };
+        
         startTimerHz (30.0f);
     }
     

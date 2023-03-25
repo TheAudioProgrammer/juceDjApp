@@ -45,9 +45,11 @@ public:
     std::function<void()> onStop = [](){};
     std::function<void()> onLoad = [](){};
     std::function<void()> onGainChange = [](){};
+    std::function<void()> onTrackDroppedFromPlayList = [](){};
     
     float percentageInTrackPlayed { 0.0f };
-
+    juce::String pathToDroppedTrack { "" };
+    
 private:
     void drawDisc (juce::Graphics& g);
     void update();
@@ -65,6 +67,7 @@ private:
     juce::Label trackLengthLabel { "Song Length" };
     
     bool somethingIsBeingDraggedOver = false;
+    
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPlayerView)
 };

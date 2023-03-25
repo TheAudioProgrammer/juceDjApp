@@ -91,7 +91,8 @@ void Playlist::paintCell (juce::Graphics& g, int rowNumber, int columnId, int wi
 
 juce::Component* Playlist::refreshComponentForCell (int rowNumber, int columnId, bool isRowSelected, juce::Component* existingComponentToUpdate)
 {
-    juce::ignoreUnused (isRowSelected);
+    if (isRowSelected == true)
+        currentRow = rowNumber;
     
     if (columnId == 1)
     {
