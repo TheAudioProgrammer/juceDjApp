@@ -10,6 +10,9 @@ class XmlTrackList
 public:
     /* See if our XML exists in the resources folder...if not, create one!  This is just a temporary location as a proof of concept */
     void createNewXml();
+    bool checkForUserFolder();
+    bool checkForPlaylistFile();
+    const juce::File& getPlaylistFile();
     
     void addHeaderData (juce::XmlElement& xml);
     
@@ -18,6 +21,7 @@ public:
     
 private:
     // Just a proof of concept for now
-    juce::File xmlDirectory { "/Users/theaudioprogrammer/Development/JUCE/audioProgrammer/juceDjApp/Source/Resources/Assets/TrackList.xml" };
     juce::String trackListDirectory { "/Users/theaudioprogrammer/Desktop" };
+    juce::File userFolder { juce::File::getSpecialLocation (juce::File::SpecialLocationType::userMusicDirectory).getChildFile ("TAP DJ App") };
+    juce::File playlistFile { userFolder.getChildFile ("Playlist.xml") };
 };

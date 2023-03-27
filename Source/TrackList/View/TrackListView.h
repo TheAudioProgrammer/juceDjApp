@@ -12,7 +12,7 @@ public:
     Playlist();
     ~Playlist() override;
     
-    void loadData (juce::File& xmlDir);
+    void loadData (const juce::File& xmlDir);
     
     // From TableListBoxModel
     int getNumRows() override;
@@ -41,7 +41,6 @@ private:
     std::unique_ptr<juce::XmlElement> xmlData;
     juce::XmlElement* headerList { nullptr };
     juce::XmlElement* trackList { nullptr };
-    juce::File xmlDirectory { "/Users/theaudioprogrammer/Development/JUCE/audioProgrammer/juceDjApp/Source/Resources/Assets/TrackList.xml" };
     XmlTrackList xmlTrackList;
     int numRows = 0;
     int currentRow = 0;

@@ -3,10 +3,38 @@
 
 void XmlTrackList::createNewXml()
 {
+    auto userFolderExists = checkForUserFolder();
+    auto playlistFileExists = checkForPlaylistFile();
+    
+    jassert (userFolderExists && playlistFileExists);
+    
+    
     juce::XmlElement xml ("TABLE_DATA");
     addHeaderData (xml);
     addLibraryData (xml, trackListDirectory);
-    xml.writeTo (xmlDirectory);
+    xml.writeTo (playlistFile);
+}
+
+bool XmlTrackList::checkForUserFolder()
+{
+    if (! userFolder.exists())
+        return userFolder.createDirectory();
+    
+    return userFolder.isDirectory();
+}
+
+bool XmlTrackList::checkForPlaylistFile()
+{
+    if (! playlistFile.existsAsFile())
+        return playlistFile.create().wasOk();
+    
+    return playlistFile.existsAsFile();
+}
+
+const juce::File& XmlTrackList::getPlaylistFile()
+{
+    jassert (playlistFile.existsAsFile());
+    return playlistFile;
 }
 
 void XmlTrackList::addHeaderData (juce::XmlElement& xml)

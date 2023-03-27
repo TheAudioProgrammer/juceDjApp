@@ -3,10 +3,9 @@
 
 Playlist::Playlist()
 {
-    if (! xmlDirectory.exists())
-        xmlTrackList.createNewXml();
-    
-    loadData (xmlDirectory);
+    // TODO: XML Tracklist should be changed to PlaylistXml
+    xmlTrackList.createNewXml();
+    loadData (xmlTrackList.getPlaylistFile());
 }
 
 Playlist::~Playlist()
@@ -14,9 +13,10 @@ Playlist::~Playlist()
     listBox.setModel (nullptr);
 }
 
-void Playlist::loadData (juce::File& xmlDir)
+void Playlist::loadData (const juce::File& xmlDir)
 {
     jassert (xmlDir.exists());
+    
     xmlData = juce::XmlDocument::parse (xmlDir);
     trackList = xmlData->getChildByName ("LIBRARY");
     headerList = xmlData->getChildByName ("HEADERS");
