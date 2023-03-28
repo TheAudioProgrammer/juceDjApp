@@ -15,7 +15,7 @@
 #include "AudioPlayer/AudioPlayer.h"
 
 // Playlist
-#include "TrackList/View/TrackListView.h"
+#include "TrackList/View/PlaylistView.h"
 
 
 //==============================================================================

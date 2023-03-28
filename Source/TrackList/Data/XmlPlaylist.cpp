@@ -1,21 +1,21 @@
 
-#include "XmlTrackList.h"
+#include "XmlPlaylist.h"
 
-void XmlTrackList::createNewXml()
+void XmlPlaylist::createNewXml()
 {
     auto userFolderExists = checkForUserFolder();
-    auto playlistFileExists = checkForPlaylistFile();
+    auto playlistFileExists = checkForFile();
     
     jassert (userFolderExists && playlistFileExists);
     
     
     juce::XmlElement xml ("TABLE_DATA");
     addHeaderData (xml);
-    addLibraryData (xml, trackListDirectory);
+    addLibraryData (xml, playlistDirectory);
     xml.writeTo (playlistFile);
 }
 
-bool XmlTrackList::checkForUserFolder()
+bool XmlPlaylist::checkForUserFolder()
 {
     if (! userFolder.exists())
         return userFolder.createDirectory();
@@ -23,7 +23,7 @@ bool XmlTrackList::checkForUserFolder()
     return userFolder.isDirectory();
 }
 
-bool XmlTrackList::checkForPlaylistFile()
+bool XmlPlaylist::checkForFile()
 {
     if (! playlistFile.existsAsFile())
         return playlistFile.create().wasOk();
@@ -31,13 +31,13 @@ bool XmlTrackList::checkForPlaylistFile()
     return playlistFile.existsAsFile();
 }
 
-const juce::File& XmlTrackList::getPlaylistFile()
+const juce::File& XmlPlaylist::getFile()
 {
     jassert (playlistFile.existsAsFile());
     return playlistFile;
 }
 
-void XmlTrackList::addHeaderData (juce::XmlElement& xml)
+void XmlPlaylist::addHeaderData (juce::XmlElement& xml)
 {
     auto* headerData = new juce::XmlElement ("HEADERS");
     
@@ -58,7 +58,7 @@ void XmlTrackList::addHeaderData (juce::XmlElement& xml)
     xml.addChildElement (headerData);
 }
 
-void XmlTrackList::addLibraryData (juce::XmlElement& xml, juce::String directoryToSearch)
+void XmlPlaylist::addLibraryData (juce::XmlElement& xml, juce::String directoryToSearch)
 {
     auto* libData = new juce::XmlElement ("LIBRARY");
                 

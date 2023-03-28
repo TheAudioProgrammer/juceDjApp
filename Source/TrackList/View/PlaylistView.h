@@ -3,7 +3,7 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 #include "../../Metadata/Metadata.h"
-#include "../Data/XmlTrackList.h"
+#include "../Data/XmlPlaylist.h"
 
 
 class Playlist : public juce::TableListBoxModel
@@ -41,7 +41,7 @@ private:
     std::unique_ptr<juce::XmlElement> xmlData;
     juce::XmlElement* headerList { nullptr };
     juce::XmlElement* trackList { nullptr };
-    XmlTrackList xmlTrackList;
+    XmlPlaylist xmlPlaylist;
     int numRows = 0;
     int currentRow = 0;
     juce::Font font { 14.0f };

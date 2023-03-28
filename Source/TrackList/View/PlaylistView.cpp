@@ -1,11 +1,11 @@
 
-#include "TrackListView.h"
+#include "PlaylistView.h"
 
 Playlist::Playlist()
 {
     // TODO: XML Tracklist should be changed to PlaylistXml
-    xmlTrackList.createNewXml();
-    loadData (xmlTrackList.getPlaylistFile());
+    xmlPlaylist.createNewXml();
+    loadData (xmlPlaylist.getFile());
 }
 
 Playlist::~Playlist()
