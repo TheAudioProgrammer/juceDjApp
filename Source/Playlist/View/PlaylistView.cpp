@@ -4,8 +4,8 @@
 Playlist::Playlist()
 {
     // TODO: XML Tracklist should be changed to PlaylistXml
-    xmlPlaylist.createNewXml();
-    loadData (xmlPlaylist.getFile());
+    //xmlPlaylist.createNewXml();
+    //loadData (xmlPlaylist.getFile());
 }
 
 Playlist::~Playlist()

@@ -30,7 +30,6 @@ public:
     juce::var getDragSourceDescription (const juce::SparseSet<int>& selectedRows) override
     {
         juce::ignoreUnused (selectedRows);
-        DBG ("YESSSSS");
         return getText (3, currentRow);
     }
     

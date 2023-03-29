@@ -8,14 +8,14 @@
 // Data
 #include "MixerDevice/Data/MixerDeviceScanner.h"
 
-// UI
-#include "Settings/View/SettingsView.h"
-
 // Encapsulated objects (UI, Data & State)
 #include "AudioPlayer/AudioPlayer.h"
 
 // Playlist
-#include "TrackList/View/PlaylistView.h"
+#include "Playlist/View/PlaylistView.h"
+
+// Toolbar with settings, adding tracks etc
+#include "Toolbar/View/Toolbar.h"
 
 
 //==============================================================================
@@ -45,12 +45,12 @@ public:
 private:
     // Checks our list of USB devices when a new device is connected
     MixerDeviceScanner deviceScanner;
-    
-    SettingsView settingsView;
-    
+        
     AudioPlayer audioPlayer1;
     
     Playlist playlist;
+    
+    Toolbar toolbar;
         
     bool fileIsLoaded { false };
     

@@ -1,7 +1,7 @@
 #include "MainComponent.h"
 
 //==============================================================================
-MainComponent::MainComponent() : deviceScanner (deviceManager), settingsView (deviceManager)
+MainComponent::MainComponent() : deviceScanner (deviceManager), toolbar (deviceManager)
 {
     setSize (1400, 600);
 
@@ -21,10 +21,10 @@ MainComponent::MainComponent() : deviceScanner (deviceManager), settingsView (de
     // Device manager broadcasts when a new device is connected
     deviceManager.addChangeListener (&deviceScanner);
         
-    addAndMakeVisible (settingsView);
     addAndMakeVisible (audioPlayer1.playerView);
     addAndMakeVisible (audioPlayer1.waveformView);
     addAndMakeVisible (playlist.getComponent());
+    addAndMakeVisible (toolbar);
 }
 
 MainComponent::~MainComponent()
@@ -64,9 +64,10 @@ void MainComponent::resized()
 {
     auto pad = 10;
     
-    settingsView.setBounds (10, 10, 100, 50);
-    audioPlayer1.playerView.setBounds (10, settingsView.getBottom() + pad, 600, 300);
-    audioPlayer1.waveformView.setBounds (audioPlayer1.playerView.getRight() + pad, settingsView.getBottom() + pad, 600, 100);
+    toolbar.setBounds (10, 10, getWidth() - 20, 70);
+
+    audioPlayer1.playerView.setBounds (10, toolbar.getBottom() + pad, 600, 300);
+    audioPlayer1.waveformView.setBounds (audioPlayer1.playerView.getRight() + pad, toolbar.getBottom() + pad, 600, 100);
     playlist.getComponent().setBounds (10,audioPlayer1.playerView.getBottom() + pad, 1200, 400);
 }
 

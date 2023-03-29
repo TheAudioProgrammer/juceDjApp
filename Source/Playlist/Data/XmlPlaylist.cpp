@@ -1,34 +1,37 @@
 
 #include "XmlPlaylist.h"
 
-void XmlPlaylist::createNewXml()
+
+XmlPlaylist::XmlPlaylist()
 {
-    auto userFolderExists = checkForUserFolder();
-    auto playlistFileExists = checkForFile();
-    
-    jassert (userFolderExists && playlistFileExists);
-    
-    
-    juce::XmlElement xml ("TABLE_DATA");
-    addHeaderData (xml);
-    addLibraryData (xml, playlistDirectory);
-    xml.writeTo (playlistFile);
+    auto userFolderAndPlaylistExists = checkForUserFolderAndPlaylist();
+    jassert (userFolderAndPlaylistExists);
 }
 
-bool XmlPlaylist::checkForUserFolder()
+bool XmlPlaylist::checkForUserFolderAndPlaylist() 
+{
+    auto userFolderExists = checkForUserFolder();
+    
+    jassert (userFolderExists);
+    
+    if (! playlistFile.existsAsFile())
+        return createNewXml();
+            
+    return playlistFile.existsAsFile();
+}
+
+bool XmlPlaylist::createNewXml()
+{
+    addHeaderData();
+    return playlistFile.existsAsFile();
+}
+
+bool XmlPlaylist::checkForUserFolder() const
 {
     if (! userFolder.exists())
         return userFolder.createDirectory();
     
     return userFolder.isDirectory();
-}
-
-bool XmlPlaylist::checkForFile()
-{
-    if (! playlistFile.existsAsFile())
-        return playlistFile.create().wasOk();
-    
-    return playlistFile.existsAsFile();
 }
 
 const juce::File& XmlPlaylist::getFile()
@@ -37,8 +40,10 @@ const juce::File& XmlPlaylist::getFile()
     return playlistFile;
 }
 
-void XmlPlaylist::addHeaderData (juce::XmlElement& xml)
+void XmlPlaylist::addHeaderData()
 {
+    juce::XmlElement xmlHeader ("TABLE_DATA");
+    
     auto* headerData = new juce::XmlElement ("HEADERS");
     
     std::vector<std::vector<juce::String>> columns = { { "Title", "400" },
@@ -55,17 +60,21 @@ void XmlPlaylist::addHeaderData (juce::XmlElement& xml)
         headerData->addChildElement (columnData);
     }
     
-    xml.addChildElement (headerData);
+    xmlHeader.addChildElement (headerData);
+    
+    xmlHeader.writeTo (playlistFile);
 }
 
-void XmlPlaylist::addLibraryData (juce::XmlElement& xml, juce::String directoryToSearch)
+void XmlPlaylist::addTrackData (const juce::File& directoryToSearch)
 {
-    auto* libData = new juce::XmlElement ("LIBRARY");
-                
-    auto directory = juce::File (directoryToSearch);
+    jassert (playlistFile.existsAsFile());
     
+    xml = juce::XmlDocument::parse (playlistFile);
+    
+    auto* libData = new juce::XmlElement ("LIBRARY");
+                    
     // Look for all audio files in the directory we give it
-    auto tracksInDirectory = directory.findChildFiles (juce::File::TypesOfFileToFind::findFiles, true, "*.mp3;*.wav" );
+    auto tracksInDirectory = directoryToSearch.findChildFiles (juce::File::TypesOfFileToFind::findFiles, true, "*.mp3;*.wav" );
     
     // Create the xml from the metadata in each audio file
     for (auto& track : tracksInDirectory)
@@ -81,5 +90,6 @@ void XmlPlaylist::addLibraryData (juce::XmlElement& xml, juce::String directoryT
         libData->addChildElement (fileData);
     }
     
-    xml.addChildElement (libData);
+    xml->addChildElement (libData);
+    xml->writeTo (playlistFile);
 }
