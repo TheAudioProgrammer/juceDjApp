@@ -27,7 +27,7 @@ void Playlist::loadData (const juce::File& xmlDir)
 
     juce::String headerElement { "HEADERS" };
     juce::String libElement { "LIBRARY" };
-
+    
     for (auto* element : xmlData->getChildIterator())
     {
         if (element->hasTagName (headerElement));
@@ -36,29 +36,20 @@ void Playlist::loadData (const juce::File& xmlDir)
 
             for (auto* column : headerList->getChildIterator())
             {
-                bool isAlreadyColumn = false;
-
-                for (int id = 1; id <= listBox.getHeader().getNumColumns (false); id++)
-                {
-                    // If our column is already in the listbox, skip over it...
-                    if (column->getStringAttribute ("name") == listBox.getHeader().getColumnName (id))
-                    {
-                        isAlreadyColumn = true;
-                        break;
-                    }
-                }
-
-                // We've checked through all our columns, and we haven't added it yet, so we'll make a new column here...
-                if (! isAlreadyColumn)
+                std::unordered_set<juce::String>::const_iterator it = headerAttributeList.find (column->getStringAttribute ("name"));
+                
+                // If we didn't find this column name in our list of columns, we need to add it to the table header
+                if (it == headerAttributeList.end())
                 {
                     listBox.getHeader().addColumn (column->getStringAttribute ("name"),
                                                    column->getIntAttribute ("columnId"),
                                                    column->getIntAttribute ("width"));
+                    
+                    // Add column name to the list of columns already added so we don't try to add a duplicate column
+                    headerAttributeList.insert (column->getStringAttribute ("name"));
                 }
             }
         }
-
-        // If I didn't have a library tag and initialized library the first time, it refreshed...if we already had a library tag, it didn't refresh
         
         if (element->hasTagName (libElement))
         {

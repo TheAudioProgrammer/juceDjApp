@@ -57,9 +57,9 @@ void XmlPlaylist::addHeaderData()
         columnData->setAttribute ("name", columns[i][0]);
         columnData->setAttribute ("width", columns[i][1]);
         
-        headerData->addChildElement (columnData);
+        headerData->addChildElement (columnData);        
     }
-    
+        
     xmlData.addChildElement (headerData);
     xmlData.writeTo (playlistFile);
 }

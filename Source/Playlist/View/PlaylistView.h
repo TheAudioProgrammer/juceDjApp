@@ -54,6 +54,7 @@ private:
     // TODO: This should be global, static, or otherwise
     juce::File userFolder { juce::File::getSpecialLocation (juce::File::SpecialLocationType::userMusicDirectory).getChildFile ("TAP DJ App") };
     juce::File playlistFile { userFolder.getChildFile ("Playlist.xml") };
+    std::unordered_set<juce::String> headerAttributeList;
 
 
     
