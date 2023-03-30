@@ -42,7 +42,7 @@ const juce::File& XmlPlaylist::getFile()
 
 void XmlPlaylist::addHeaderData()
 {
-    juce::XmlElement xmlHeader ("TABLE_DATA");
+    juce::XmlElement xmlData ("TABLE_DATA");
     
     auto* headerData = new juce::XmlElement ("HEADERS");
     
@@ -60,22 +60,48 @@ void XmlPlaylist::addHeaderData()
         headerData->addChildElement (columnData);
     }
     
-    xmlHeader.addChildElement (headerData);
-    
-    xmlHeader.writeTo (playlistFile);
+    xmlData.addChildElement (headerData);
+    xmlData.writeTo (playlistFile);
 }
 
 void XmlPlaylist::addTrackData (const juce::File& directoryToSearch)
 {
-    jassert (playlistFile.existsAsFile());
+    if (! playlistFile.existsAsFile())
+        checkForUserFolderAndPlaylist();
+    
+    jassert (checkForUserFolderAndPlaylist());
+    
+    const juce::String library { "LIBRARY" };
+    bool hasLibraryElement { false };
     
     xml = juce::XmlDocument::parse (playlistFile);
     
-    auto* libData = new juce::XmlElement ("LIBRARY");
-                    
-    // Look for all audio files in the directory we give it
-    auto tracksInDirectory = directoryToSearch.findChildFiles (juce::File::TypesOfFileToFind::findFiles, true, "*.mp3;*.wav" );
+    for (auto* element : xml->getChildIterator())
+    {
+        // We already have a library element, so we just need to add tracks to it
+        if (element->hasTagName (library))
+        {
+            addTracks (element, directoryToSearch);
+            xml->writeTo (playlistFile);
+            hasLibraryElement = true;
+        }
+    }
     
+    // This means we've checked and don't have any of the element we're looking for...
+    if (! hasLibraryElement)
+    {
+        auto* element = new juce::XmlElement (library);
+        addTracks (element, directoryToSearch);
+        xml->addChildElement (element);
+        xml->writeTo (playlistFile);
+    }
+}
+
+void XmlPlaylist::addTracks (juce::XmlElement* xmlElement, const juce::File& directoryToSearchForTracks)
+{
+    // Look for all audio files in the directory we give it
+    auto tracksInDirectory = directoryToSearchForTracks.findChildFiles (juce::File::TypesOfFileToFind::findFiles, true, "*.mp3;*.wav" );
+
     // Create the xml from the metadata in each audio file
     for (auto& track : tracksInDirectory)
     {
@@ -87,9 +113,6 @@ void XmlPlaylist::addTrackData (const juce::File& directoryToSearch)
         fileData->setAttribute ("Artist", metadata.artist);
         fileData->setAttribute ("Path", metadata.path);
         
-        libData->addChildElement (fileData);
+        xmlElement->addChildElement (fileData);
     }
-    
-    xml->addChildElement (libData);
-    xml->writeTo (playlistFile);
 }
