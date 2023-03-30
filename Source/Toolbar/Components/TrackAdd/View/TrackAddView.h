@@ -10,7 +10,7 @@
 class TrackAddView : public juce::Component
 {
 public:
-    TrackAddView();
+    TrackAddView (XmlPlaylist& xml);
     void resized() override;
     
     // TODO: State should not reside in a view
@@ -19,7 +19,7 @@ public:
 private:
     juce::TextButton trackAddButton { "Add Tracks "};
     std::unique_ptr<juce::FileChooser> songSelector;
-    XmlPlaylist xmlPlaylist;
+    XmlPlaylist& xmlPlaylist;
     
     /* Necessary to register and stream audio formats */
     juce::AudioFormatManager audioFormatManager;

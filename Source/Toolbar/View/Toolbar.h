@@ -5,11 +5,12 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 #include "../Components/Settings/View/SettingsView.h"
 #include "../Components/TrackAdd/View/TrackAddView.h"
+#include "../../Playlist/Data/XmlPlaylist.h"
 
 class Toolbar : public juce::Component
 {
 public:
-    Toolbar (juce::AudioDeviceManager& m);
+    Toolbar (juce::AudioDeviceManager& m, XmlPlaylist& xml);
     void paint (juce::Graphics& g) override;
     void resized() override;
     

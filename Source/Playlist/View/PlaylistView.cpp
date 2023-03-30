@@ -4,6 +4,11 @@
 Playlist::Playlist (TrackAddState& t) : trackState (t)
 {
     trackState.addChangeListener (this);
+    
+    if (playlistFile.exists())
+        loadData (playlistFile);
+    else
+        jassertfalse;
 }
 
 Playlist::~Playlist()
@@ -15,24 +20,50 @@ Playlist::~Playlist()
 void Playlist::loadData (const juce::File& xmlDir)
 {
     jassert (xmlDir.exists());
-    
-    xmlData = juce::XmlDocument::parse (xmlDir);
-    trackList = xmlData->getChildByName ("LIBRARY");
-    headerList = xmlData->getChildByName ("HEADERS");
-    numRows = trackList->getNumChildElements();
         
-    if (headerList)
+    xmlData = juce::XmlDocument::parse (xmlDir);
+    
+    juce::String headerElement { "HEADERS" };
+    juce::String libElement { "LIBRARY" };
+    
+    for (auto* element : xmlData->getChildIterator())
     {
-        for (auto* column : headerList->getChildIterator())
+        if (element->hasTagName (headerElement));
         {
-            listBox.getHeader().addColumn (column->getStringAttribute ("name"),
-                                           column->getIntAttribute ("columnId"),
-                                           column->getIntAttribute ("width"));
+            headerList = xmlData->getChildByName (headerElement);
+            
+            for (auto* column : headerList->getChildIterator())
+            {
+                bool isAlreadyColumn = false;
+                
+                for (int id = 1; id <= listBox.getHeader().getNumColumns (false); id++)
+                {
+                    // If our column is already in the listbox, skip over it...
+                    if (column->getStringAttribute ("name") == listBox.getHeader().getColumnName (id))
+                    {
+                        isAlreadyColumn = true;
+                        break;
+                    }
+                }
+                
+                // We've checked through all our columns, and we haven't added it yet, so we'll make a new column here...
+                if (! isAlreadyColumn)
+                {
+                    listBox.getHeader().addColumn (column->getStringAttribute ("name"),
+                                                   column->getIntAttribute ("columnId"),
+                                                   column->getIntAttribute ("width"));
+                }
+            }
+        }
+        
+        if (element->hasTagName (libElement))
+        {
+            trackList = xmlData->getChildByName (libElement);
+            numRows = trackList->getNumChildElements();
         }
     }
         
     jassert (headerList);
-    jassert (trackList);
 }
 
 int Playlist::getNumRows()
@@ -152,7 +183,7 @@ juce::String Playlist::getText (const int columnNumber, const int rowNumber)
     return trackList->getChildElement (rowNumber)->getStringAttribute (getAttributeNameForColumnId (columnNumber));
 }
 
-void Playlist::changeListenerCallback(juce::ChangeBroadcaster* broadcaster)
+void Playlist::changeListenerCallback (juce::ChangeBroadcaster* broadcaster)
 {
     if (broadcaster == &trackState)
     {

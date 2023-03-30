@@ -53,6 +53,7 @@ private:
     Playlist playlist;
         
     bool fileIsLoaded { false };
+    XmlPlaylist xmlPlaylist;
     
     juce::LookAndFeel_V4 customLookAndFeel;
 

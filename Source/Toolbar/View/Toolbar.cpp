@@ -2,7 +2,7 @@
 
 #include "Toolbar.h"
 
-Toolbar::Toolbar (juce::AudioDeviceManager& m) : settingsView (m)
+Toolbar::Toolbar (juce::AudioDeviceManager& m, XmlPlaylist& xml) : settingsView (m), trackAddView (xml)
 {
     addAndMakeVisible (settingsView);
     addAndMakeVisible (trackAddView);

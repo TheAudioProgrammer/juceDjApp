@@ -2,7 +2,7 @@
 #include "TrackAddView.h"
 
 
-TrackAddView::TrackAddView()
+TrackAddView::TrackAddView (XmlPlaylist& xml) : xmlPlaylist (xml)
 {
     audioFormatManager.registerBasicFormats();
     
