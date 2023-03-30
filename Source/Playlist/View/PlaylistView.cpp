@@ -5,7 +5,7 @@ Playlist::Playlist (TrackAddState& t) : trackState (t)
 {
     trackState.addChangeListener (this);
     
-    if (playlistFile.exists())
+    if (playlistFile.existsAsFile())
         loadData (playlistFile);
     else
         jassertfalse;
@@ -19,23 +19,25 @@ Playlist::~Playlist()
 
 void Playlist::loadData (const juce::File& xmlDir)
 {
-    jassert (xmlDir.exists());
-        
     xmlData = juce::XmlDocument::parse (xmlDir);
     
+    jassert (xmlDir.exists());
+
+    xmlData = juce::XmlDocument::parse (xmlDir);
+
     juce::String headerElement { "HEADERS" };
     juce::String libElement { "LIBRARY" };
-    
+
     for (auto* element : xmlData->getChildIterator())
     {
         if (element->hasTagName (headerElement));
         {
             headerList = xmlData->getChildByName (headerElement);
-            
+
             for (auto* column : headerList->getChildIterator())
             {
                 bool isAlreadyColumn = false;
-                
+
                 for (int id = 1; id <= listBox.getHeader().getNumColumns (false); id++)
                 {
                     // If our column is already in the listbox, skip over it...
@@ -45,7 +47,7 @@ void Playlist::loadData (const juce::File& xmlDir)
                         break;
                     }
                 }
-                
+
                 // We've checked through all our columns, and we haven't added it yet, so we'll make a new column here...
                 if (! isAlreadyColumn)
                 {
@@ -55,15 +57,17 @@ void Playlist::loadData (const juce::File& xmlDir)
                 }
             }
         }
+
+        // If I didn't have a library tag and initialized library the first time, it refreshed...if we already had a library tag, it didn't refresh
         
         if (element->hasTagName (libElement))
         {
             trackList = xmlData->getChildByName (libElement);
             numRows = trackList->getNumChildElements();
-            listBox.repaint();
+            listBox.updateContent();
         }
     }
-        
+
     jassert (headerList);
 }
 
