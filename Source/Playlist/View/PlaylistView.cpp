@@ -60,6 +60,7 @@ void Playlist::loadData (const juce::File& xmlDir)
         {
             trackList = xmlData->getChildByName (libElement);
             numRows = trackList->getNumChildElements();
+            listBox.repaint();
         }
     }
         
