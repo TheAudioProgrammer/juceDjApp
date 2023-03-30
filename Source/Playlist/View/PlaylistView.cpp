@@ -1,15 +1,14 @@
 
 #include "PlaylistView.h"
 
-Playlist::Playlist()
+Playlist::Playlist (TrackAddState& t) : trackState (t)
 {
-    // TODO: XML Tracklist should be changed to PlaylistXml
-    //xmlPlaylist.createNewXml();
-    //loadData (xmlPlaylist.getFile());
+    trackState.addChangeListener (this);
 }
 
 Playlist::~Playlist()
 {
+    trackState.removeAllChangeListeners();
     listBox.setModel (nullptr);
 }
 
@@ -151,6 +150,14 @@ void Playlist::setText (const int columnNumber, const int rowNumber, const juce:
 juce::String Playlist::getText (const int columnNumber, const int rowNumber)
 {
     return trackList->getChildElement (rowNumber)->getStringAttribute (getAttributeNameForColumnId (columnNumber));
+}
+
+void Playlist::changeListenerCallback(juce::ChangeBroadcaster* broadcaster)
+{
+    if (broadcaster == &trackState)
+    {
+        loadData (playlistFile);
+    }
 }
 
 

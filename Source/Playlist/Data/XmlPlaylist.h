@@ -11,7 +11,7 @@ public:
     XmlPlaylist();
     bool checkForUserFolderAndPlaylist();
     
-    const juce::File& getFile();
+    const juce::File& getPlaylistFile();
     
     void addHeaderData();
     void addTrackData (const juce::File& directoryToSearch);
@@ -21,7 +21,6 @@ private:
     bool createNewXml();
     void addTracks (juce::XmlElement* xmlElement, const juce::File& directoryToSearchForTracks);
 
-    //juce::String playlistDirectory { "/Users/theaudioprogrammer/Desktop" };
     juce::File userFolder { juce::File::getSpecialLocation (juce::File::SpecialLocationType::userMusicDirectory).getChildFile ("TAP DJ App") };
     juce::File playlistFile { userFolder.getChildFile ("Playlist.xml") };
     std::unique_ptr<juce::XmlElement> xml;

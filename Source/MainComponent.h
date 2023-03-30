@@ -47,10 +47,10 @@ private:
     MixerDeviceScanner deviceScanner;
         
     AudioPlayer audioPlayer1;
+        
+    Toolbar toolbar;
     
     Playlist playlist;
-    
-    Toolbar toolbar;
         
     bool fileIsLoaded { false };
     

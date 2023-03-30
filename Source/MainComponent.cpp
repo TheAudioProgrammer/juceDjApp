@@ -1,7 +1,7 @@
 #include "MainComponent.h"
 
 //==============================================================================
-MainComponent::MainComponent() : deviceScanner (deviceManager), toolbar (deviceManager)
+MainComponent::MainComponent() : deviceScanner (deviceManager), toolbar (deviceManager), playlist (toolbar.getTrackAddState())
 {
     setSize (1400, 600);
 

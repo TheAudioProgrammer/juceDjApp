@@ -34,7 +34,7 @@ bool XmlPlaylist::checkForUserFolder() const
     return userFolder.isDirectory();
 }
 
-const juce::File& XmlPlaylist::getFile()
+const juce::File& XmlPlaylist::getPlaylistFile()
 {
     jassert (playlistFile.existsAsFile());
     return playlistFile;

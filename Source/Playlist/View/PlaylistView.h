@@ -4,12 +4,14 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 #include "../../Metadata/Metadata.h"
 #include "../Data/XmlPlaylist.h"
+#include "../../Toolbar/Components/TrackAdd/State/TrackAddState.h"
 
 
-class Playlist : public juce::TableListBoxModel
+class Playlist : public juce::TableListBoxModel,
+                 public juce::ChangeListener
 {
 public:
-    Playlist();
+    Playlist (TrackAddState& t);
     ~Playlist() override;
     
     void loadData (const juce::File& xmlDir);
@@ -34,6 +36,9 @@ public:
     }
     
     juce::Component& getComponent() { return listBox; }
+    
+    // From Change Listener
+    void changeListenerCallback (juce::ChangeBroadcaster* b) override;
         
 private:
     juce::TableListBox listBox { "Playlist", this };
@@ -44,6 +49,12 @@ private:
     int numRows = 0;
     int currentRow = 0;
     juce::Font font { 14.0f };
+    TrackAddState& trackState;
+    
+    // TODO: This should be global, static, or otherwise
+    juce::File userFolder { juce::File::getSpecialLocation (juce::File::SpecialLocationType::userMusicDirectory).getChildFile ("TAP DJ App") };
+    juce::File playlistFile { userFolder.getChildFile ("Playlist.xml") };
+
 
     
     class TrackListCell : public juce::Label
