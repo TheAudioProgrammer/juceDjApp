@@ -14,5 +14,10 @@ From the main repository folder, you will see `CMakeLists.txt`.  In the command 
 
 Check out this [awesome tutorial](https://melatonin.dev/blog/how-to-use-cmake-with-juce/) from Sudara on further info on CMake and JUCE.  It takes a second to learn but it will greatly enhance your capabilities as a developer!
 
+## Dependencies
+**Note:** These are already pulled in using CMake's "Fetch Content"
+[Taglib](https://github.com/taglib/taglib) - Reading and writing audio file metadata
+[XWax](https://github.com/xwax/xwax) - Digital Vinyl System (DVS) control
+
 ## License
 This source code is licensed under the GNU General Public License (GPLv3) agreement. 
