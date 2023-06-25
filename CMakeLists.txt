@@ -38,24 +38,37 @@ FetchContent_Declare (
     GIT_TAG origin/master
     GIT_SHALLOW ON)
 
+FetchContent_Declare (
+    xwax
+    GIT_REPOSITORY https://github.com/xwax/xwax.git
+    GIT_TAG origin/master
+    GIT_SHALLOW ON)
+
 FetchContent_MakeAvailable (JUCE)
 FetchContent_MakeAvailable (taglib)
+FetchContent_MakeAvailable (xwax)
 
 if(taglib_POPULATED)
     get_property(dirs DIRECTORY "${taglib_SOURCE_DIR}/taglib" PROPERTY INCLUDE_DIRECTORIES)
     target_include_directories(tag PUBLIC ${dirs} "${taglib_SOURCE_DIR}/taglib")
 endif()
 
+if(xwax_POPULATED)
+    target_include_directories(tag PUBLIC ${xwax_SOURCE_DIR})
+endif()
+
 juce_add_gui_app(juceDjApp)
 
 # We want all source code in the source directory
 file(GLOB_RECURSE SourceFiles CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/Source/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/Source/*.h")
+file(GLOB_RECURSE XWaxFiles CONFIGURE_DEPENDS "${xwax_SOURCE_DIR}/*.c" "${xwax_SOURCE_DIR}/*.h")
 
 # No, we don't want our source buried in extra nested folders
 set_target_properties("${PROJECT_NAME}" PROPERTIES FOLDER "")
 
 # The Xcode source tree should look like the source tree
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/Source PREFIX "" FILES ${SourceFiles})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/Source PREFIX "Source" FILES ${SourceFiles})
+source_group(TREE ${xwax_SOURCE_DIR} PREFIX "XWax" FILES ${XWaxFiles})
 
 
 # `target_sources` adds source files to a target. We pass the target that needs the sources as the
@@ -63,7 +76,7 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/Source PREFIX "" FILES ${SourceFil
 # Finally, we supply a list of source files that will be built into the target. This is a standard
 # CMake command.
 
-target_sources("${PROJECT_NAME}" PRIVATE ${SourceFiles})
+target_sources("${PROJECT_NAME}" PRIVATE ${SourceFiles} ${XWaxFiles})
 
 target_link_libraries(juceDjApp PRIVATE
     juce::juce_analytics
