@@ -48,7 +48,6 @@ endif()
 
 juce_add_gui_app(juceDjApp)
 
-
 # We want all source code in the source directory
 file(GLOB_RECURSE SourceFiles CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/Source/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/Source/*.h")
 
